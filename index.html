@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>cryovex — links</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0b0d16;
+    --surface: #141726;
+    --surface-2: #1b1f33;
+    --border: #262b42;
+    --text: #f2f3fa;
+    --muted: #9199b8;
+    --muted-2: #5c6488;
+    --moon: #c9b8ff;      /* primary accent — moonlight */
+    --lamp: #ffb37a;      /* secondary accent — warm glow */
+    --green: #5be3a0;
+    --amber: #ffcf6b;
+    --red: #ff7085;
+  }
+
+  [data-theme="light"]{
+    --bg: #f5f4fb;
+    --surface: #ffffff;
+    --surface-2: #f0eff9;
+    --border: #e1e0f0;
+    --text: #191b29;
+    --muted: #5f6584;
+    --muted-2: #9093ac;
+    --moon: #6a4fe0;
+    --lamp: #c9722b;
+    --green: #1fa864;
+    --amber: #a97a1c;
+    --red: #d13a56;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body{
+    margin:0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    transition: background-color .25s ease, color .25s ease;
+  }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+  a { color: inherit; }
+  ::selection { background: var(--moon); color: #0b0d16; }
+  section[id]{ scroll-margin-top: 84px; }
+
+  :focus-visible{ outline: 2px solid var(--moon); outline-offset: 3px; border-radius: 4px; }
+
+  /* ---------- Ambient backdrop: moon glow + starfield ---------- */
+  .ambient{ position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+  .moon-glow{
+    position: absolute;
+    top: -160px; left: 50%;
+    transform: translateX(-50%);
+    width: 560px; height: 560px;
+    background: radial-gradient(circle, color-mix(in srgb, var(--moon) 32%, transparent) 0%, transparent 70%);
+    filter: blur(6px);
+    opacity: .55;
+  }
+  [data-theme="light"] .moon-glow{ opacity: .3; }
+
+  .starfield .star{
+    position: absolute;
+    background: var(--moon);
+    border-radius: 50%;
+    animation: star-twinkle ease-in-out infinite;
+  }
+  @keyframes star-twinkle{
+    0%, 100% { opacity: var(--min-op, 0.15); }
+    50% { opacity: var(--max-op, 0.8); }
+  }
+  [data-theme="light"] .starfield{ opacity: 0.25; }
+
+  .starfield .shooting-star{
+    position: absolute;
+    width: 2px; height: 2px;
+    background: var(--moon);
+    border-radius: 50%;
+    box-shadow: 0 0 6px 1px var(--moon);
+    opacity: 0;
+    animation: shoot 1.6s ease-in forwards;
+  }
+  .starfield .shooting-star::before{
+    content: "";
+    position: absolute;
+    top: 50%; right: 0;
+    width: 90px; height: 1px;
+    background: linear-gradient(to left, var(--moon), transparent);
+    transform: translateY(-50%);
+  }
+  @keyframes shoot{
+    0%{ opacity: 0; transform: translate(0, 0); }
+    8%{ opacity: 1; }
+    80%{ opacity: 1; }
+    100%{ opacity: 0; transform: translate(-320px, 200px); }
+  }
+
+  header, .wrap, footer{ position: relative; z-index: 1; }
+
+  /* ---------- Layout shell ---------- */
+  .wrap{ max-width: 720px; margin: 0 auto; padding: 0 24px; }
+
+  header.topbar{
+    position: sticky; top: 0; z-index: 20;
+    backdrop-filter: blur(10px);
+    background: color-mix(in srgb, var(--bg) 80%, transparent);
+    border-bottom: 1px solid var(--border);
+  }
+  .topbar-inner{
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 15px 24px; max-width: 720px; margin: 0 auto; gap: 16px;
+  }
+  .brand{ display:flex; align-items:center; gap:9px; text-decoration:none; }
+  .brand-name{ font-family:'Unbounded', sans-serif; font-size: 14px; font-weight: 600; color: var(--text); }
+  .brand-dot{ width:7px; height:7px; border-radius:50%; background: var(--muted-2); flex-shrink:0; transition: background .3s ease; }
+  .brand-dot.online{ background: var(--green); box-shadow: 0 0 6px var(--green); animation: pulse 2.2s ease-in-out infinite; }
+  .brand-dot.idle{ background: var(--amber); box-shadow: 0 0 6px var(--amber); }
+  .brand-dot.dnd{ background: var(--red); box-shadow: 0 0 6px var(--red); }
+  .brand-dot.offline{ background: var(--muted-2); }
+  @keyframes pulse{ 0%,100%{ opacity:1; } 50%{ opacity:.4; } }
+
+  .topbar-nav{ display:flex; gap: 24px; }
+  .topbar-nav a{ font-size: 13.5px; color: var(--muted); text-decoration:none; transition: color .15s ease; }
+  .topbar-nav a:hover{ color: var(--text); }
+
+  .theme-toggle{
+    display:flex; align-items:center; justify-content:center;
+    width: 36px; height:36px; border-radius: 9px;
+    border: 1px solid var(--border); background: var(--surface);
+    color: var(--muted); cursor: pointer;
+    transition: border-color .18s ease, color .18s ease, transform .18s ease;
+  }
+  .theme-toggle:hover{ border-color: var(--moon); color: var(--moon); transform: translateY(-1px); }
+  .theme-toggle svg{ width:16px; height:16px; }
+  .theme-toggle .icon-moon{ display: none; }
+  [data-theme="light"] .theme-toggle .icon-sun{ display:none; }
+  [data-theme="light"] .theme-toggle .icon-moon{ display:block; }
+
+  .toast{
+    position: fixed; bottom: 24px; left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--surface); border: 1px solid var(--moon); color: var(--text);
+    font-family: 'JetBrains Mono', monospace; font-size: 12.5px;
+    padding: 10px 16px; border-radius: 8px;
+    opacity: 0; pointer-events: none;
+    transition: opacity .2s ease, transform .2s ease;
+    z-index: 50;
+  }
+  .toast.show{ opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ---------- Music toggle ---------- */
+  .music-toggle{
+    position: fixed; bottom: 24px; right: 24px;
+    width: 56px; height:56px; border-radius: 50%;
+    border: 1px solid var(--border); background: var(--surface); color: var(--lamp);
+    display:flex; align-items:center; justify-content:center;
+    cursor: pointer; z-index: 40;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.35);
+    transition: border-color .18s ease, transform .18s ease;
+  }
+  .music-toggle:hover{ border-color: var(--lamp); transform: translateY(-2px); }
+  .music-toggle .play-icon{ width:20px; height:20px; }
+  .music-toggle .bars{ display:none; align-items:flex-end; gap:3px; height: 18px; }
+  .music-toggle .bars span{ width:3px; background: var(--lamp); border-radius: 1px; animation: eq 0.9s ease-in-out infinite; }
+  .music-toggle .bars span:nth-child(1){ height:40%; animation-delay: 0s; }
+  .music-toggle .bars span:nth-child(2){ height:100%; animation-delay: .15s; }
+  .music-toggle .bars span:nth-child(3){ height:65%; animation-delay: .3s; }
+  .music-toggle .bars span:nth-child(4){ height:85%; animation-delay: .45s; }
+  @keyframes eq{ 0%, 100% { transform: scaleY(0.4); } 50% { transform: scaleY(1); } }
+  .music-toggle.playing .play-icon{ display:none; }
+  .music-toggle.playing .bars{ display:flex; }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    padding: 76px 0 68px;
+    max-width: 480px; margin: 0 auto;
+    text-align: center;
+    display:flex; flex-direction: column; align-items: center;
+    opacity: 0; transform: translateY(14px);
+    transition: opacity .6s ease, transform .6s ease;
+  }
+  .hero.is-ready{ opacity: 1; transform: none; }
+
+  h1.name{
+    font-family: 'Unbounded', sans-serif;
+    font-size: clamp(38px, 9vw, 58px);
+    line-height: 1;
+    margin: 0 0 14px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  h1.name .glow{
+    background: linear-gradient(120deg, var(--text) 35%, var(--moon));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .handle{ color: var(--muted); font-size: 13px; margin: 0 0 20px; letter-spacing: .02em; }
+  .tagline{ color: var(--muted); font-size: 16px; line-height: 1.6; max-width: 40ch; margin: 0 0 30px; }
+
+  /* ---------- Terminal-style presence card ---------- */
+  .term-card{
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; overflow: hidden;
+    max-width: 420px; width: 100%; margin: 0 auto;
+    text-align: left;
+    box-shadow: 0 24px 60px -36px rgba(0,0,0,.6);
+  }
+  .term-head{
+    display:flex; align-items:center; gap:10px;
+    padding: 10px 14px; background: var(--surface-2); border-bottom: 1px solid var(--border);
+  }
+  .term-dots{ display:flex; gap:6px; }
+  .term-dots span{ width:8px; height:8px; border-radius:50%; }
+  .term-dots span:nth-child(1){ background:#ff5f57; }
+  .term-dots span:nth-child(2){ background:#febc2e; }
+  .term-dots span:nth-child(3){ background:#28c840; }
+  .term-title{ font-size: 11px; color: var(--muted-2); }
+  .term-body{ padding: 16px 18px 18px; font-size: 13px; line-height: 1.75; }
+  .term-line{ margin: 0; }
+  .term-prompt{ color: var(--moon); margin-right: 6px; }
+  .term-out{ color: var(--text); padding-left: 16px; }
+  .term-muted{ color: var(--muted); font-size: 12px; }
+  .term-comment{ color: var(--muted-2); padding-left: 16px; }
+
+  /* ---------- Section shared ---------- */
+  section{ padding: 64px 0; border-top: 1px solid var(--border); }
+  .section-title{
+    font-family: 'Unbounded', sans-serif;
+    font-size: 17px; font-weight: 600;
+    margin: 0 0 30px; text-align: center;
+  }
+
+  /* ---------- About ---------- */
+  .about-text{ max-width: 440px; margin: 0 auto; text-align: center; }
+  .about-text p{ color: var(--muted); font-size: 15.5px; line-height: 1.7; margin: 0; }
+  .about-text .quip{ color: var(--text); font-style: italic; margin-top: 16px; }
+
+  /* ---------- Links ---------- */
+  .link-list{ display:flex; flex-direction:column; gap: 12px; max-width: 480px; margin: 0 auto; }
+  .link-row{
+    appearance: none;
+    display:flex; align-items:center; gap: 16px;
+    width: 100%; min-height: 68px;
+    padding: 13px 16px;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: inherit;
+    font-family: inherit;
+    text-decoration: none;
+    cursor: pointer;
+    text-align: left;
+    transition: border-color .18s ease, background .18s ease, transform .18s ease;
+  }
+  .link-row:hover{ border-color: var(--moon); background: var(--surface-2); transform: translateY(-2px); }
+  .link-icon{
+    width: 46px; height: 46px; border-radius: 12px; flex-shrink: 0;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .link-icon svg{ width: 21px; height: 21px; }
+  .link-icon.instagram{ background: color-mix(in srgb, #e1306c 18%, var(--surface-2)); color: #e05a8a; }
+  .link-icon.yt{ background: color-mix(in srgb, #ff4d4d 18%, var(--surface-2)); color: #ff5c5c; }
+  .link-icon.discord{ background: color-mix(in srgb, #5865f2 20%, var(--surface-2)); color: #8ea1ff; }
+  .link-icon.steam{ background: color-mix(in srgb, #66c0f4 18%, var(--surface-2)); color: #66c0f4; }
+  .link-icon.x{ background: var(--surface-2); color: var(--text); }
+  .link-icon.github{ background: var(--surface-2); color: var(--text); }
+  .link-icon.reddit{ background: color-mix(in srgb, #ff5700 18%, var(--surface-2)); color: #ff7a33; }
+  .link-text{ display:flex; flex-direction:column; gap: 2px; min-width: 0; }
+  .link-name{ font-size: 15px; font-weight: 600; }
+  .link-detail{ font-size: 12px; color: var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .link-arrow{
+    margin-left: auto; flex-shrink: 0;
+    color: var(--muted-2); font-size: 20px;
+    transition: transform .18s ease, color .18s ease;
+  }
+  .link-row:hover .link-arrow{ transform: translateX(3px); color: var(--moon); }
+
+  footer{
+    border-top: 1px solid var(--border);
+    padding: 28px 0 40px;
+    font-family:'JetBrains Mono', monospace;
+    font-size: 12px; color: var(--muted-2);
+    display:flex; justify-content:space-between; flex-wrap: wrap; gap:8px;
+  }
+
+  @media (max-width: 780px){
+    .hero{ padding-top: 52px; }
+    .topbar-nav{ display:none; }
+    .topbar-inner{ padding: 13px 20px; }
+    .wrap{ padding: 0 20px; }
+    .link-row{ padding: 12px 14px; gap: 14px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .starfield .star{ animation: none; opacity: 0.35; }
+    .brand-dot.online{ animation: none; }
+    .music-toggle .bars span{ animation: none; }
+    .hero{ transition: none; opacity: 1; transform: none; }
+    html{ scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+
+<div class="ambient" aria-hidden="true">
+  <div class="moon-glow"></div>
+  <div class="starfield" id="starfield"></div>
+</div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="#top" class="brand">
+      <span class="brand-dot" id="brandDot" title="checking status"></span>
+      <span class="brand-name">cryovex</span>
+    </a>
+    <nav class="topbar-nav">
+      <a href="#about">About</a>
+      <a href="#links">Links</a>
+    </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark theme" title="Toggle theme">
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8L6 18M18 6l1.8-1.8"/></svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+    </button>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <section class="hero" id="top" style="border-top:none;">
+    <h1 class="name"><span class="glow">Bio</span></h1>
+    <p class="handle mono">shows my current status/activity,</p>
+    <p class="handle mono">from discord.</p>
+    <p class="handle mono">v1.1</p>
+    <p class="tagline">ٱلْحَمْدُ لِلَّٰهِ</p>
+
+    <div class="term-card" id="presenceCard" style="display:none;">
+      <div class="term-head">
+        <span class="term-dots"><span></span><span></span><span></span></span>
+        <span class="term-title mono">discordStatus.log</span>
+      </div>
+      <div class="term-body mono">
+        <p class="term-line"><span class="term-prompt">$</span>whoami  - currentstatus,</p>
+        <p class="term-line term-out">spentstare — <span id="presenceStatusText">checking…</span></p>
+        <p class="term-line" id="nowPromptLine" style="display:none;"><span class="term-prompt">$</span>current activity,</p>
+        <p class="term-line term-out" id="presenceActivityText" style="display:none;"></p>
+        <p class="term-line term-out term-muted" id="presenceActivitySub" style="display:none;"></p>
+        <p class="term-line term-out" id="presenceMusicText" style="display:none;"></p>
+        <p class="term-line term-out term-muted" id="presenceMusicSub" style="display:none;"></p>
+        <p class="term-line term-comment" id="presenceIdleComment" style="display:none;"># status</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <h2 class="section-title">About</h2>
+    <div class="about-text">
+      <p>just here for fun.</p>
+      <p>kind of a portfolio.</p>
+      <p>currently shows only the Discord Status.</p>
+      <p class="quip">The Moon is Beautiful, isn't it?</p>
+      <p>xd</p>
+    </div>
+  </section>
+
+  <!-- LINKS -->
+  <section id="links">
+    <h2 class="section-title">Other Links,</h2>
+    <div class="link-list">
+
+      <a class="link-row" href="https://www.instagram.com/h4mdanqx?igsi=a3lxcjNIMGY4eHky&amp;utm_source=qr" target="_blank" rel="noopener" aria-label="Instagram — @h4mdanqx, opens in new tab">
+        <span class="link-icon instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5.5"/><circle cx="12" cy="12" r="4.1"/><circle cx="17.3" cy="6.7" r="0.65" fill="currentColor" stroke="none"/></svg></span>
+        <span class="link-text"><span class="link-name">Instagram</span><span class="link-detail mono">@h4mdanqx</span></span>
+        <span class="link-arrow">›</span>
+      </a>
+
+      <a class="link-row" href="https://youtube.com/@cryovexxx?si=PjM0WGyn2Vx04MDV" target="_blank" rel="noopener" aria-label="YouTube — @cryovexxx, opens in new tab">
+        <span class="link-icon yt"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.6 31.6 0 0 0 0 12a31.6 31.6 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31.6 31.6 0 0 0 24 12a31.6 31.6 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.3 3.6-6.3 3.6Z"/></svg></span>
+        <span class="link-text"><span class="link-name">YouTube</span><span class="link-detail mono">@cryovexxx</span></span>
+        <span class="link-arrow">›</span>
+      </a>
+
+      <a class="link-row" href="https://steamcommunity.com/id/cryovexx/" target="_blank" rel="noopener" aria-label="Steam — cryovexx, opens in new tab">
+        <span class="link-icon steam"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.98 0C5.36 0 0 5.4 0 12s5.36 12 11.98 12S24 18.6 24 12 18.6 0 11.98 0Zm5.6 17.2c-.24.4-.72.5-1.1.28-3-1.83-6.8-2.25-11.26-1.23-.44.1-.87-.17-.97-.6-.1-.44.17-.87.6-.97 4.9-1.12 9.1-.64 12.44 1.4.4.24.5.72.29 1.12Zm1.47-3.28c-.3.48-.9.63-1.38.34-3.43-2.1-8.66-2.72-12.72-1.48-.53.16-1.08-.14-1.24-.65-.16-.53.14-1.08.66-1.24 4.63-1.4 10.4-.72 14.34 1.67.47.29.62.9.34 1.36Zm.13-3.42C15.03 8 8.9 7.8 5.5 8.87c-.62.2-1.28-.16-1.47-.78-.2-.63.16-1.29.78-1.48 3.9-1.2 10.6-.96 14.79 1.54.56.33.75 1.06.4 1.62-.32.55-1.05.74-1.61.4Z"/></svg></span>
+        <span class="link-text"><span class="link-name">Steam</span><span class="link-detail mono">cryovexx</span></span>
+        <span class="link-arrow">›</span>
+      </a>
+
+      <button class="link-row" type="button" id="discordCopy" aria-label="Discord — spentstare, tap to copy">
+        <span class="link-icon discord"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.3 4.4a19 19 0 0 0-4.7-1.5l-.2.4a13 13 0 0 1 4.2 1.6 16.6 16.6 0 0 0-16.2 0 12.8 12.8 0 0 1 4.2-1.6l-.2-.4A19 19 0 0 0 2.7 4.4C.7 8 .1 11.5.3 15a17 17 0 0 0 5.1 2.6c.4-.6.8-1.2 1.1-1.9a10.6 10.6 0 0 1-1.7-.8l.4-.3a12.2 12.2 0 0 0 10.6 0l.4.3a10.6 10.6 0 0 1-1.7.8c.3.7.7 1.3 1.1 1.9A17 17 0 0 0 20.7 15c.2-4-.6-7.5-2.4-10.6ZM8.4 12.9c-.8 0-1.4-.7-1.4-1.6 0-.9.6-1.6 1.4-1.6.8 0 1.5.7 1.4 1.6 0 .9-.6 1.6-1.4 1.6Zm7.2 0c-.8 0-1.4-.7-1.4-1.6 0-.9.6-1.6 1.4-1.6.8 0 1.5.7 1.4 1.6 0 .9-.6 1.6-1.4 1.6Z"/></svg></span>
+        <span class="link-text"><span class="link-name">Discord (main)</span><span class="link-detail mono">spentstare · tap to copy</span></span>
+        <span class="link-arrow">›</span>
+      </button>
+
+      <button class="link-row" type="button" id="discordCopyAlt" aria-label="Discord, alternate — cryovex1, tap to copy">
+        <span class="link-icon discord"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.3 4.4a19 19 0 0 0-4.7-1.5l-.2.4a13 13 0 0 1 4.2 1.6 16.6 16.6 0 0 0-16.2 0 12.8 12.8 0 0 1 4.2-1.6l-.2-.4A19 19 0 0 0 2.7 4.4C.7 8 .1 11.5.3 15a17 17 0 0 0 5.1 2.6c.4-.6.8-1.2 1.1-1.9a10.6 10.6 0 0 1-1.7-.8l.4-.3a12.2 12.2 0 0 0 10.6 0l.4.3a10.6 10.6 0 0 1-1.7.8c.3.7.7 1.3 1.1 1.9A17 17 0 0 0 20.7 15c.2-4-.6-7.5-2.4-10.6ZM8.4 12.9c-.8 0-1.4-.7-1.4-1.6 0-.9.6-1.6 1.4-1.6.8 0 1.5.7 1.4 1.6 0 .9-.6 1.6-1.4 1.6Zm7.2 0c-.8 0-1.4-.7-1.4-1.6 0-.9.6-1.6 1.4-1.6.8 0 1.5.7 1.4 1.6 0 .9-.6 1.6-1.4 1.6Z"/></svg></span>
+        <span class="link-text"><span class="link-name">Discord (alt)</span><span class="link-detail mono">cryovex1 · tap to copy</span></span>
+        <span class="link-arrow">›</span>
+      </button>
+
+      <a class="link-row" href="https://x.com/hamdan07000" target="_blank" rel="noopener" aria-label="X — @hamdan07000, opens in new tab">
+        <span class="link-icon x"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.24 2h3.3l-7.2 8.23L23 22h-6.63l-5.2-6.8L5.2 22H1.9l7.7-8.8L1 2h6.8l4.7 6.2L18.24 2Zm-1.16 18h1.83L7 4h-1.9l12 16Z"/></svg></span>
+        <span class="link-text"><span class="link-name">X</span><span class="link-detail mono">@hamdan07000</span></span>
+        <span class="link-arrow">›</span>
+      </a>
+
+      <a class="link-row" href="https://github.com/AHcryo" target="_blank" rel="noopener" aria-label="GitHub — AHcryo, opens in new tab">
+        <span class="link-icon github"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.57.1.78-.25.78-.55 0-.27-.01-1.17-.02-2.12-3.2.7-3.88-1.36-3.88-1.36-.52-1.34-1.28-1.7-1.28-1.7-1.04-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.26-1.28-5.26-5.71 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11 11 0 0 1 2.9-.39c.98 0 1.97.13 2.9.39 2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.77.11 3.06.74.81 1.19 1.84 1.19 3.1 0 4.44-2.7 5.42-5.28 5.7.42.36.78 1.07.78 2.17 0 1.56-.01 2.82-.01 3.2 0 .3.2.66.79.55A10.52 10.52 0 0 0 23.5 12c0-6.27-5.23-11.5-11.5-11.5Z"/></svg></span>
+        <span class="link-text"><span class="link-name">GitHub</span><span class="link-detail mono">AHcryo</span></span>
+        <span class="link-arrow">›</span>
+      </a>
+
+      <a class="link-row" href="https://reddit.com/u/Turbulent-Court1766" target="_blank" rel="noopener" aria-label="Reddit — u slash Turbulent-Court1766, opens in new tab">
+        <span class="link-icon reddit"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.6 0 12 0Zm5.01 9.7a1.7 1.7 0 0 1 1.7 1.72c0 .68-.38 1.26-.93 1.55.02.14.03.29.03.44 0 2.36-2.6 4.28-5.81 4.28s-5.81-1.92-5.81-4.28c0-.15.01-.3.03-.44a1.72 1.72 0 0 1 .77-3.25c.44 0 .84.17 1.14.44 1.1-.72 2.6-1.19 4.27-1.24l.8-3.4a.32.32 0 0 1 .38-.24l2.62.58a1.15 1.15 0 1 1-.16.66l-2.34-.53-.68 2.93c1.62.07 3.07.54 4.15 1.24.3-.27.7-.44 1.14-.44ZM8.5 12.5a1.1 1.1 0 1 0 0-2.2 1.1 1.1 0 0 0 0 2.2Zm7 0a1.1 1.1 0 1 0 0-2.2 1.1 1.1 0 0 0 0 2.2Zm-6.36 2.3a.4.4 0 0 0-.03.56c.63.7 1.83 1.13 2.89 1.13s2.26-.43 2.89-1.13a.4.4 0 0 0-.6-.53c-.47.51-1.35.87-2.29.87s-1.82-.36-2.29-.87a.4.4 0 0 0-.57-.03Z"/></svg></span>
+        <span class="link-text"><span class="link-name">Reddit</span><span class="link-detail mono">u/Turbulent-Court1766</span></span>
+        <span class="link-arrow">›</span>
+      </a>
+
+    </div>
+  </section>
+
+  <footer>
+    <span>© created on 2026/08/31 </span>
+    <span class="mono">interesting...</span>
+  </footer>
+
+</div>
+
+<div class="toast mono" id="toast">Copied!</div>
+
+<audio id="bgMusic" loop preload="none">
+  <source src="music/theme.mp3" type="audio/mpeg">
+</audio>
+
+<button class="music-toggle" id="musicToggle" aria-label="Toggle background music" title="Toggle music">
+  <span class="bars" id="musicBars"><span></span><span></span><span></span><span></span></span>
+  <svg class="play-icon" id="playIcon" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+</button>
+
+<script>
+  // ---- Subtle starfield backdrop ----
+  (function(){
+    const field = document.getElementById('starfield');
+    if (!field) return;
+    const count = window.innerWidth < 600 ? 40 : 70;
+    for (let i = 0; i < count; i++){
+      const s = document.createElement('div');
+      s.className = 'star';
+      const size = (Math.random() * 1.6 + 0.6).toFixed(2);
+      s.style.width = size + 'px';
+      s.style.height = size + 'px';
+      s.style.left = (Math.random() * 100) + 'vw';
+      s.style.top = (Math.random() * 100) + 'vh';
+      s.style.setProperty('--min-op', (Math.random() * 0.15 + 0.05).toFixed(2));
+      s.style.setProperty('--max-op', (Math.random() * 0.5 + 0.4).toFixed(2));
+      s.style.animationDuration = (Math.random() * 3 + 2.5).toFixed(2) + 's';
+      s.style.animationDelay = (Math.random() * 4).toFixed(2) + 's';
+      field.appendChild(s);
+    }
+
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!prefersReduced) {
+      function spawnShootingStar(){
+        const star = document.createElement('div');
+        star.className = 'shooting-star';
+        star.style.top = (Math.random() * 50) + 'vh';
+        star.style.left = (50 + Math.random() * 45) + 'vw';
+        field.appendChild(star);
+        setTimeout(() => star.remove(), 1700);
+      }
+      function scheduleNext(){
+        const delay = 10000 + Math.random() * 10000;
+        setTimeout(() => { spawnShootingStar(); scheduleNext(); }, delay);
+      }
+      scheduleNext();
+    }
+  })();
+
+  // ---- One-time hero reveal ----
+  requestAnimationFrame(() => {
+    document.querySelector('.hero').classList.add('is-ready');
+  });
+
+  // ---- Theme toggle (remembers choice via localStorage) ----
+  const root = document.documentElement;
+  const toggleBtn = document.getElementById('themeToggle');
+  const savedTheme = localStorage.getItem('cryovex-theme');
+  if (savedTheme === 'light') root.setAttribute('data-theme', 'light');
+
+  toggleBtn.addEventListener('click', () => {
+    const isLight = root.getAttribute('data-theme') === 'light';
+    if (isLight) {
+      root.removeAttribute('data-theme');
+      localStorage.setItem('cryovex-theme', 'dark');
+    } else {
+      root.setAttribute('data-theme', 'light');
+      localStorage.setItem('cryovex-theme', 'light');
+    }
+  });
+
+  // ---- Toast helper ----
+  const toast = document.getElementById('toast');
+  let toastTimer;
+  function showToast(msg){
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 1800);
+  }
+
+  // ---- Live Discord presence via Lanyard ----
+  const DISCORD_ID = '1234864585501310978';
+  const statusLabels = { online: 'online 🌕', idle: 'idle 🌙', dnd: 'do not disturb ⛔', offline: 'offline ⏻' };
+
+  async function updatePresence(){
+    try{
+      const res = await fetch(`https://api.lanyard.rest/v1/users/${DISCORD_ID}`);
+      const json = await res.json();
+      if(!json.success) throw new Error('lanyard lookup failed');
+      const d = json.data;
+      const status = d.discord_status || 'offline';
+
+      const brandDot = document.getElementById('brandDot');
+      brandDot.className = 'brand-dot ' + status;
+      brandDot.title = statusLabels[status] || status;
+
+      document.getElementById('presenceStatusText').textContent = statusLabels[status] || status;
+      document.getElementById('presenceCard').style.display = 'block';
+
+      const game = Array.isArray(d.activities) ? d.activities.find(a => a.type === 0) : null;
+      const hasMusic = !!(d.listening_to_spotify && d.spotify);
+
+      const nowPrompt = document.getElementById('nowPromptLine');
+      const activityText = document.getElementById('presenceActivityText');
+      const activitySub = document.getElementById('presenceActivitySub');
+      const musicText = document.getElementById('presenceMusicText');
+      const musicSub = document.getElementById('presenceMusicSub');
+      const idleComment = document.getElementById('presenceIdleComment');
+
+      nowPrompt.style.display = (game || hasMusic) ? 'block' : 'none';
+      idleComment.style.display = (game || hasMusic) ? 'none' : 'block';
+
+      if (game) {
+        activityText.textContent = '› playing ' + game.name;
+        activitySub.textContent = game.details || '';
+        activityText.style.display = 'block';
+        activitySub.style.display = game.details ? 'block' : 'none';
+      } else {
+        activityText.style.display = 'none';
+        activitySub.style.display = 'none';
+      }
+
+      if (hasMusic) {
+        musicText.textContent = '› listening to ' + d.spotify.song;
+        musicSub.textContent = 'by ' + d.spotify.artist;
+        musicText.style.display = 'block';
+        musicSub.style.display = 'block';
+      } else {
+        musicText.style.display = 'none';
+        musicSub.style.display = 'none';
+      }
+    }catch(e){
+      const brandDot = document.getElementById('brandDot');
+      brandDot.className = 'brand-dot offline';
+      brandDot.title = 'status unavailable';
+      const card = document.getElementById('presenceCard');
+      if (card) card.style.display = 'none';
+    }
+  }
+  updatePresence();
+  setInterval(updatePresence, 20000);
+
+  // ---- Background music: try to autoplay, fall back to first-tap ----
+  const bgMusic = document.getElementById('bgMusic');
+  const musicToggle = document.getElementById('musicToggle');
+  bgMusic.volume = 0.4;
+
+  async function tryPlay(){
+    try{
+      await bgMusic.play();
+      musicToggle.classList.add('playing');
+      return true;
+    }catch(e){
+      return false;
+    }
+  }
+
+  // Most mobile browsers block audio with sound until the visitor has
+  // interacted with the page at least once — this attempts it right away,
+  // and if that's blocked, plays on the very first tap/click/key anywhere.
+  (async () => {
+    const started = await tryPlay();
+    if (!started) {
+      const unlock = async (e) => {
+        if (e.target && e.target.closest && e.target.closest('#musicToggle')) return;
+        const ok = await tryPlay();
+        if (ok) {
+          document.removeEventListener('pointerdown', unlock);
+          document.removeEventListener('keydown', unlock);
+        }
+      };
+      document.addEventListener('pointerdown', unlock, { once: true });
+      document.addEventListener('keydown', unlock, { once: true });
+    }
+  })();
+
+  musicToggle.addEventListener('click', async () => {
+    if (bgMusic.paused) {
+      const ok = await tryPlay();
+      if (!ok) showToast('Add music/theme.mp3 next to this file to enable music');
+    } else {
+      bgMusic.pause();
+      musicToggle.classList.remove('playing');
+    }
+  });
+
+  // ---- Copy Discord tags to clipboard ----
+  document.getElementById('discordCopy').addEventListener('click', async () => {
+    const tag = 'spentstare';
+    try{
+      await navigator.clipboard.writeText(tag);
+      showToast('Copied "' + tag + '" to clipboard');
+    }catch(e){
+      showToast('Copy failed — tag is: ' + tag);
+    }
+  });
+
+  document.getElementById('discordCopyAlt').addEventListener('click', async () => {
+    const tag = 'cryovex1';
+    try{
+      await navigator.clipboard.writeText(tag);
+      showToast('Copied "' + tag + '" to clipboard');
+    }catch(e){
+      showToast('Copy failed — tag is: ' + tag);
+    }
+  });
+</script>
+
+</body>
+</html>
