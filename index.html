@@ -1,0 +1,3405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gargantua — O/L Formula Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>
+  (function(){
+    try {
+      var saved = localStorage.getItem('gargantuaTheme');
+      if (saved === 'light'){ document.documentElement.setAttribute('data-theme', 'light'); }
+    } catch (e) {}
+  })();
+</script>
+<style>
+  :root{
+    --void:#050508;
+    --void-2:#0a0912;
+    --panel: rgba(255,255,255,0.035);
+    --panel-border: rgba(232,178,109,0.22);
+    --horizon-glow: rgba(255,150,60,0.35);
+    --gold: #E8B26D;
+    --gold-bright: #FFD79A;
+    --ember: #FF6A3D;
+    --ember-soft: #FF8F5C;
+    --text: #F2ECE0;
+    --text-dim: #A79C89;
+    --text-faint: #6E6455;
+    --science: #5FC7EC;
+    --science-bright: #B7E9FF;
+    --science-deep: #2E86C1;
+    --maths: #E8B26D;
+    --nebula-violet: rgba(150,110,230,0.10);
+    --serif: 'Spectral', Georgia, serif;
+    --mono: 'JetBrains Mono', 'Courier New', monospace;
+
+    --body-glow-1: rgba(255,140,70,0.07);
+    --body-glow-2: rgba(95,199,236,0.05);
+    --controls-bg: rgba(5,5,8,0.72);
+    --modal-bg-strong: rgba(9,8,13,0.9);
+    --stars-opacity: 0.6;
+    --scrollbar-thumb: rgba(232,178,109,0.35);
+    --btn-shine: rgba(255,255,255,0.06);
+    --btn-shadow: rgba(0,0,0,0.55);
+
+    --w02: rgba(255,255,255,0.02);
+    --w03: rgba(255,255,255,0.03);
+    --w035: rgba(255,255,255,0.035);
+    --w04: rgba(255,255,255,0.04);
+    --w05: rgba(255,255,255,0.05);
+    --w055: rgba(255,255,255,0.055);
+    --w06: rgba(255,255,255,0.06);
+    --w07: rgba(255,255,255,0.07);
+    --w08: rgba(255,255,255,0.08);
+    --w09: rgba(255,255,255,0.09);
+    --w10: rgba(255,255,255,0.1);
+    --w12: rgba(255,255,255,0.12);
+    --w14: rgba(255,255,255,0.14);
+    --w15: rgba(255,255,255,0.15);
+    --w18: rgba(255,255,255,0.18);
+  }
+
+  [data-theme="light"]{
+    --void:#FBF3E6;
+    --void-2:#F4E7D3;
+    --panel: rgba(60,40,15,0.04);
+    --panel-border: rgba(170,110,35,0.3);
+    --horizon-glow: rgba(200,90,30,0.22);
+    --gold:#A9701F;
+    --gold-bright:#8A5411;
+    --ember:#C1440E;
+    --ember-soft:#AE3B12;
+    --text:#2A2016;
+    --text-dim:#6B5A44;
+    --text-faint:#8F7D64;
+    --science:#0E7FA8;
+    --science-bright:#0A5F80;
+    --science-deep:#0E7FA8;
+    --maths:#A9701F;
+    --nebula-violet: rgba(110,70,190,0.05);
+
+    --body-glow-1: rgba(200,90,30,0.05);
+    --body-glow-2: rgba(14,127,168,0.04);
+    --controls-bg: rgba(251,243,230,0.82);
+    --modal-bg-strong: rgba(255,250,241,0.92);
+    --stars-opacity: 0;
+    --scrollbar-thumb: rgba(169,112,31,0.4);
+    --btn-shine: rgba(255,255,255,0.5);
+    --btn-shadow: rgba(60,40,15,0.18);
+
+    --w02: rgba(30,20,8,0.035);
+    --w03: rgba(30,20,8,0.05);
+    --w035: rgba(30,20,8,0.055);
+    --w04: rgba(30,20,8,0.06);
+    --w05: rgba(30,20,8,0.075);
+    --w055: rgba(30,20,8,0.08);
+    --w06: rgba(30,20,8,0.09);
+    --w07: rgba(30,20,8,0.1);
+    --w08: rgba(30,20,8,0.11);
+    --w09: rgba(30,20,8,0.12);
+    --w10: rgba(30,20,8,0.13);
+    --w12: rgba(30,20,8,0.15);
+    --w14: rgba(30,20,8,0.17);
+    --w15: rgba(30,20,8,0.18);
+    --w18: rgba(30,20,8,0.22);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{ transition: background-color .35s ease, color .35s ease; }
+
+  body{
+    margin:0;
+    background:
+      radial-gradient(ellipse 120% 60% at 50% 0%, var(--body-glow-1), transparent 60%),
+      radial-gradient(1200px 800px at 15% 20%, var(--body-glow-2), transparent 50%),
+      var(--void);
+    color:var(--text);
+    font-family:var(--serif);
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  /* light theme reads as an astronomical almanac page, not an inverted dark mode:
+     a fine engraved dot-grid plus hairline margins, like star-chart paper */
+  [data-theme="light"] body{
+    background:
+      radial-gradient(ellipse 120% 60% at 50% 0%, var(--body-glow-1), transparent 60%),
+      radial-gradient(1200px 800px at 15% 20%, var(--body-glow-2), transparent 50%),
+      radial-gradient(circle, rgba(60,40,15,0.14) 0.6px, transparent 0.6px) 0 0/26px 26px,
+      var(--void);
+  }
+
+  /* starfield */
+  .stars, .stars2{
+    position:fixed; inset:0; z-index:-2; pointer-events:none;
+    transition: opacity .35s ease;
+  }
+  .stars{
+    opacity:var(--stars-opacity);
+    background-image:
+      radial-gradient(1.5px 1.5px at 20px 30px, rgba(255,255,255,0.7), transparent),
+      radial-gradient(1px 1px at 90px 120px, rgba(255,255,255,0.5), transparent),
+      radial-gradient(1.5px 1.5px at 160px 60px, rgba(255,255,255,0.6), transparent),
+      radial-gradient(1px 1px at 230px 180px, rgba(255,255,255,0.4), transparent),
+      radial-gradient(1.5px 1.5px at 300px 90px, rgba(255,255,255,0.6), transparent),
+      radial-gradient(1px 1px at 40px 200px, rgba(255,255,255,0.5), transparent),
+      radial-gradient(1.5px 1.5px at 340px 220px, rgba(255,255,255,0.55), transparent);
+    background-repeat:repeat;
+    background-size:380px 260px;
+  }
+
+  @media (prefers-reduced-motion: no-preference){
+    .stars{ animation: drift 220s linear infinite; }
+  }
+  @keyframes drift{
+    from{ background-position:0 0; }
+    to{ background-position:-2000px 900px; }
+  }
+
+  /* ---------- HERO / BLACK HOLE ---------- */
+  .hero{
+    position:relative;
+    padding: 86px 24px 58px;
+    text-align:center;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:30px;
+  }
+
+  .hole-wrap{
+    position:relative;
+    width:340px;
+    height:340px;
+    margin-bottom:14px;
+  }
+
+  .designation{
+    position:absolute;
+    left:50%;
+    bottom:-6px;
+    transform:translate(-50%, 100%);
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-family:var(--mono);
+    font-size:10.5px;
+    letter-spacing:0.1em;
+    color:var(--text-faint);
+    border:1px solid var(--w10);
+    background:var(--w03);
+    padding:5px 12px;
+    border-radius:999px;
+    white-space:nowrap;
+  }
+  .designation .dot{
+    width:5px; height:5px; border-radius:50%;
+    background:var(--gold);
+    box-shadow:0 0 6px rgba(232,178,109,0.8);
+  }
+
+  .bh-glow{
+    position:absolute; inset:-28%;
+    border-radius:50%;
+    background:
+      radial-gradient(circle at 62% 38%, rgba(120,205,255,0.10), transparent 45%),
+      radial-gradient(circle, rgba(255,180,100,0.22), rgba(150,90,220,0.05) 58%, transparent 74%);
+    filter: blur(20px);
+  }
+
+  /* wide, tilted, edge-on ring — like the disk seen from a shallow angle.
+     One side runs hotter/bluer (approaching, Doppler-boosted), the other
+     redder (receding) — the same beaming that makes real accretion disks
+     look lopsided. */
+  .ring-h{
+    position:absolute; inset:5%;
+    border-radius:50%;
+    background: conic-gradient(from 40deg,
+      transparent 0deg,
+      rgba(190,230,255,0.95) 18deg,
+      rgba(255,220,165,0.9) 30deg,
+      rgba(255,140,70,0.95) 60deg,
+      rgba(255,220,165,0.5) 92deg,
+      transparent 130deg,
+      transparent 230deg,
+      rgba(255,140,70,0.85) 270deg,
+      rgba(255,220,165,0.95) 305deg,
+      transparent 340deg);
+    -webkit-mask: radial-gradient(circle, transparent 51%, black 53%, black 100%);
+            mask: radial-gradient(circle, transparent 51%, black 53%, black 100%);
+    transform: scaleY(0.30) rotate(-7deg);
+    filter: blur(2.5px);
+    z-index:1;
+  }
+
+  /* tall, narrow ring that the horizon occludes through its middle —
+     this is what makes it read as gravitational lensing rather than a flat disk */
+  .ring-v{
+    position:absolute; inset:5%;
+    border-radius:50%;
+    background: conic-gradient(from 128deg,
+      transparent 0deg,
+      rgba(255,225,180,0.9) 20deg,
+      rgba(255,140,70,0.85) 50deg,
+      transparent 90deg,
+      transparent 270deg,
+      rgba(255,140,70,0.8) 310deg,
+      rgba(200,235,255,0.9) 340deg,
+      transparent 360deg);
+    -webkit-mask: radial-gradient(circle, transparent 51%, black 53%, black 100%);
+            mask: radial-gradient(circle, transparent 51%, black 53%, black 100%);
+    transform: scaleX(0.20) rotate(3deg);
+    filter: blur(2.5px);
+    z-index:2;
+    opacity:0.92;
+  }
+
+  @media (prefers-reduced-motion: no-preference){
+    .ring-h, .ring-v{ animation: shimmer 9s ease-in-out infinite alternate; }
+    .ring-v{ animation-delay: -3s; }
+  }
+  @keyframes shimmer{
+    from{ filter: blur(2.5px) brightness(0.92); }
+    to{ filter: blur(3.5px) brightness(1.12); }
+  }
+
+  .horizon{
+    position:absolute; inset:28%;
+    border-radius:50%;
+    background: radial-gradient(circle at 38% 32%, #14100f 0%, #000 62%);
+    box-shadow:
+      0 0 0 1px rgba(255,225,180,0.18),
+      0 0 30px 10px rgba(0,0,0,0.95),
+      0 0 55px 18px rgba(255,140,70,0.16),
+      0 0 40px 6px rgba(120,205,255,0.10);
+    z-index:3;
+  }
+
+  h1.title{
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:clamp(2.15rem, 6.2vw, 3.4rem);
+    letter-spacing:-0.005em;
+    line-height:1.18;
+    max-width:640px;
+    margin:0;
+    color:var(--gold-bright);
+    text-shadow: 0 0 34px rgba(255,180,110,0.22);
+  }
+  h1.title .accent{ color: var(--science-bright); }
+
+  .subtitle{
+    max-width:560px;
+    color:var(--text-dim);
+    font-size:1.02rem;
+    line-height:1.55;
+    margin:0;
+  }
+  .subtitle strong{ color:var(--text); font-weight:500; }
+
+  /* ---------- CONTROLS ---------- */
+  .controls{
+    position:sticky;
+    top:0;
+    z-index:20;
+    backdrop-filter: blur(14px);
+    background: var(--controls-bg);
+    border-bottom:1px solid rgba(232,178,109,0.14);
+    padding:14px 20px;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    align-items:center;
+  }
+
+  .tabs{
+    display:flex;
+    gap:6px;
+    background:var(--w03);
+    border:1px solid var(--w08);
+    border-radius:999px;
+    padding:4px;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.3);
+  }
+  .tab-btn{
+    font-family:var(--mono);
+    font-size:13px;
+    letter-spacing:0.04em;
+    padding:9px 22px;
+    border-radius:999px;
+    border:1px solid transparent;
+    background:transparent;
+    color:var(--text-dim);
+    cursor:pointer;
+    transition: color .2s ease, background .2s ease, box-shadow .2s ease, border-color .2s ease, transform .12s ease;
+  }
+  .tab-btn:hover{ color:var(--text); }
+  .tab-btn:active{ transform: translateY(1px); }
+  .tab-btn.active[data-tab="maths"]{
+    background: linear-gradient(180deg, rgba(232,178,109,0.26), rgba(232,178,109,0.09));
+    border-color: rgba(232,178,109,0.45);
+    color:var(--gold-bright);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 3px 10px -4px rgba(232,178,109,0.5);
+  }
+  .tab-btn.active[data-tab="science"]{
+    background: linear-gradient(180deg, rgba(95,199,236,0.26), rgba(95,199,236,0.09));
+    border-color: rgba(95,199,236,0.5);
+    color:var(--science-bright);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 3px 10px -4px rgba(95,199,236,0.55);
+  }
+
+  .search-wrap{
+    width:100%;
+    max-width:420px;
+    position:relative;
+  }
+  .search-wrap input{
+    width:100%;
+    font-family:var(--mono);
+    font-size:13.5px;
+    color:var(--text);
+    background:var(--w04);
+    border:1px solid var(--w10);
+    border-radius:10px;
+    padding:10px 14px 10px 34px;
+    outline:none;
+    transition:border-color .2s ease, background .2s ease;
+  }
+  .search-wrap input:focus{
+    border-color: rgba(232,178,109,0.55);
+    background:var(--w06);
+  }
+  .search-wrap::before{
+    content:"⟡";
+    position:absolute; left:12px; top:50%; transform:translateY(-50%);
+    color:var(--text-faint);
+    font-size:14px;
+  }
+
+  /* ---------- REVEAL PANEL ---------- */
+  .reveal-outer{
+    padding: 26px 20px 6px;
+    display:flex; justify-content:center;
+  }
+  .reveal{
+    width:100%;
+    max-width:760px;
+    border-radius:18px;
+    border:1px solid var(--panel-border);
+    background:
+      radial-gradient(600px 200px at 15% -20%, rgba(255,170,100,0.10), transparent 60%),
+      var(--panel);
+    padding:28px 30px;
+    box-shadow: 0 20px 60px -25px rgba(0,0,0,0.8);
+    transition: box-shadow .3s ease;
+  }
+  .reveal.pulse{
+    box-shadow: 0 0 0 1px rgba(255,190,120,0.35), 0 20px 60px -20px rgba(255,140,70,0.25);
+  }
+  .reveal .rv-label{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:0.24em;
+    text-transform:uppercase;
+    color:var(--text-faint);
+    margin:0 0 12px;
+  }
+  .reveal .rv-label.maths{ color: var(--gold); }
+  .reveal .rv-label.science{ color: var(--science); }
+
+  .rv-formula{
+    font-family:var(--mono);
+    font-weight:600;
+    font-size:clamp(1.25rem, 3.4vw, 1.75rem);
+    color:var(--text);
+    line-height:1.5;
+    margin:0 0 16px;
+    letter-spacing:0.01em;
+  }
+  .rv-formula .radical{ display:inline-flex; align-items:flex-start; }
+  .rv-formula .radical .sign{ font-size:1.3em; margin-right:2px; }
+  .rv-formula .frac{ display:inline-flex; flex-direction:column; align-items:center; vertical-align:middle; margin:0 4px; line-height:1.05; }
+  .rv-formula .frac .num, .rv-formula .frac .den{ padding:0 2px; }
+  .rv-formula .frac .num{ border-bottom:1.5px solid var(--text); }
+
+  .rv-name{
+    font-family:var(--serif);
+    font-size:1.02rem;
+    color:var(--gold-bright);
+    margin:0 0 10px;
+    font-weight:500;
+  }
+  .rv-desc{
+    font-size:1rem;
+    line-height:1.65;
+    color:var(--text-dim);
+    margin:0 0 14px;
+  }
+  .rv-desc:last-child{ margin-bottom:0; }
+  .lvl-tag{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-family:var(--mono);
+    font-size:10px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    padding:3px 9px;
+    border-radius:999px;
+    margin-right:9px;
+    transform:translateY(-1px);
+  }
+  .lvl-tag::before{
+    content:"";
+    border-radius:50%;
+    flex-shrink:0;
+  }
+  .lvl-tag.basic{ background:rgba(232,178,109,0.16); color:var(--gold-bright); border:1px solid rgba(232,178,109,0.35); }
+  .lvl-tag.basic::before{ width:5px; height:5px; background:var(--gold-bright); }
+  .lvl-tag.adv{ background:rgba(95,199,236,0.14); color:var(--science-bright); border:1px solid rgba(95,199,236,0.35); }
+  .lvl-tag.adv::before{ width:8px; height:8px; background:var(--science-bright); box-shadow:0 0 6px rgba(95,199,236,0.7); }
+  .rv-placeholder{
+    text-align:center;
+    color:var(--text-faint);
+    font-family:var(--mono);
+    font-size:13.5px;
+    padding:20px 0;
+  }
+
+  .deriv-toggle{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:0.03em;
+    color:var(--text-faint);
+    background:none;
+    border:none;
+    border-top:1px dashed var(--w14);
+    padding:14px 0 0;
+    margin-top:4px;
+    width:100%;
+    text-align:left;
+    cursor:pointer;
+    transition: color .2s ease;
+  }
+  .deriv-toggle:hover{ color:var(--gold-bright); }
+  .deriv-toggle-icon{
+    display:inline-block;
+    transition: transform .2s ease;
+    font-size:11px;
+  }
+  .deriv-toggle.open .deriv-toggle-icon{ transform: rotate(180deg); }
+  .deriv-body{
+    margin-top:12px;
+    padding:14px 16px;
+    border-radius:10px;
+    border:1px solid var(--w09);
+    background:var(--w02);
+    font-size:0.94rem;
+    line-height:1.65;
+    color:var(--text-dim);
+  }
+  .deriv-body.hidden{ display:none; }
+  .deriv-body strong{ color:var(--text); font-weight:500; }
+
+  /* ---------- CONTENT ---------- */
+  .content{
+    max-width:960px;
+    margin:0 auto;
+    padding:40px 20px 90px;
+  }
+  .category{
+    margin-bottom:42px;
+  }
+  .category h2{
+    font-family:var(--serif);
+    font-size:1.3rem;
+    font-weight:600;
+    color:var(--text);
+    margin:0 0 6px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .cat-icon{
+    display:inline-flex;
+    flex-shrink:0;
+    width:19px; height:19px;
+    color:var(--text-faint);
+  }
+  .content[data-subject="maths"] .cat-icon{ color:var(--gold); }
+  .content[data-subject="science"] .cat-icon{ color:var(--science); }
+  .cat-icon svg{ width:100%; height:100%; }
+  .cat-label{ position:relative; top:1px; }
+  .category h2::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:linear-gradient(90deg, var(--w14), transparent);
+  }
+  .cat-count{
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--text-faint);
+    letter-spacing:0.05em;
+  }
+
+  .chip-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(190px, 1fr));
+    gap:10px;
+    margin-top:16px;
+  }
+
+  .chip{
+    font-family:var(--mono);
+    font-size:13px;
+    text-align:left;
+    color:var(--text);
+    background:var(--w03);
+    border:1px solid var(--w09);
+    border-radius:11px;
+    padding:13px 15px;
+    cursor:pointer;
+    transition: border-color .18s ease, background .18s ease, transform .15s ease, box-shadow .18s ease;
+    line-height:1.4;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.02) inset;
+  }
+  .chip[data-tab="maths"]:hover{
+    border-color: rgba(232,178,109,0.5);
+    background:var(--w055);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px -14px rgba(232,178,109,0.6);
+  }
+  .chip[data-tab="science"]:hover{
+    border-color: rgba(95,199,236,0.55);
+    background:var(--w055);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px -14px rgba(95,199,236,0.6);
+  }
+  .chip.selected[data-tab="maths"]{
+    border-color: var(--gold);
+    background: linear-gradient(180deg, rgba(232,178,109,0.14), rgba(232,178,109,0.04));
+    color: var(--gold-bright);
+  }
+  .chip.selected[data-tab="science"]{
+    border-color: var(--science);
+    background: linear-gradient(180deg, rgba(95,199,236,0.14), rgba(95,199,236,0.04));
+    color: var(--science-bright);
+  }
+  .chip.hidden{ display:none; }
+
+  .empty-msg{
+    text-align:center;
+    color:var(--text-faint);
+    font-family:var(--mono);
+    font-size:13px;
+    padding:40px 0;
+  }
+
+  footer{
+    text-align:center;
+    padding:30px 20px 50px;
+    color:var(--text-faint);
+    font-family:var(--mono);
+    font-size:12px;
+    line-height:1.8;
+  }
+  footer .line{
+    width:60px; height:1px; background:var(--w15);
+    margin:0 auto 18px;
+  }
+
+  ::selection{ background: rgba(232,178,109,0.35); }
+
+  /* ---------- COCKPIT (clock / timer / music) ---------- */
+  .cockpit-toggle{
+    position:fixed;
+    right:20px; bottom:20px;
+    z-index:40;
+    width:54px; height:54px;
+    border-radius:50%;
+    border:1px solid rgba(232,178,109,0.4);
+    background: radial-gradient(circle at 35% 28%, rgba(255,205,145,0.3), rgba(10,10,14,0.92) 70%);
+    color:var(--gold-bright);
+    font-size:20px;
+    cursor:pointer;
+    box-shadow: 0 12px 30px -10px rgba(0,0,0,0.75), 0 0 0 1px var(--w03), inset 0 1px 0 rgba(255,255,255,0.12);
+    display:flex; align-items:center; justify-content:center;
+    transition: transform .18s ease, box-shadow .18s ease;
+  }
+  .cockpit-toggle:hover{ transform: scale(1.07) translateY(-1px); box-shadow: 0 16px 34px -10px rgba(232,178,109,0.35), 0 0 0 1px var(--w03); }
+  .cockpit-toggle:active{ transform: scale(0.97); }
+
+  .cockpit-panel{
+    position:fixed;
+    right:20px; bottom:84px;
+    z-index:40;
+    width:288px;
+    max-height:calc(100vh - 120px);
+    overflow-y:auto;
+    border-radius:16px;
+    border:1px solid var(--panel-border);
+    background: var(--modal-bg-strong);
+    backdrop-filter: blur(16px);
+    box-shadow: 0 30px 70px -30px rgba(0,0,0,0.85);
+    padding:16px;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+    transform-origin: bottom right;
+    transition: opacity .2s ease, transform .2s ease;
+  }
+  .cockpit-panel.hidden{
+    opacity:0;
+    transform: scale(0.92) translateY(8px);
+    pointer-events:none;
+  }
+
+  .cockpit-header{
+    display:flex; align-items:center; justify-content:space-between;
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:0.2em;
+    text-transform:uppercase;
+    color:var(--text-faint);
+  }
+  .cockpit-header button{
+    background:none; border:none; color:var(--text-faint);
+    cursor:pointer; font-size:14px; line-height:1;
+    padding:2px 4px;
+  }
+  .cockpit-header button:hover{ color:var(--gold-bright); }
+
+  .cockpit-section{
+    border-top:1px solid var(--w07);
+    padding-top:14px;
+  }
+  .cockpit-section:first-of-type{ border-top:none; padding-top:0; }
+
+  .clock-time{
+    font-family:var(--mono);
+    font-size:1.9rem;
+    font-weight:600;
+    color:var(--gold-bright);
+    text-align:center;
+    letter-spacing:0.03em;
+  }
+  .clock-date{
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--text-faint);
+    text-align:center;
+    margin-top:2px;
+    letter-spacing:0.06em;
+  }
+
+  .timer-tabs{
+    display:flex; gap:6px; margin-bottom:12px;
+  }
+  .timer-tab{
+    flex:1;
+    font-family:var(--mono);
+    font-size:11px;
+    padding:6px 0;
+    border-radius:8px;
+    border:1px solid var(--w09);
+    background:var(--w03);
+    color:var(--text-dim);
+    cursor:pointer;
+  }
+  .timer-tab.active{
+    color:var(--gold-bright);
+    border-color:rgba(232,178,109,0.4);
+    background:rgba(232,178,109,0.1);
+  }
+  .timer-display{
+    font-family:var(--mono);
+    font-size:1.7rem;
+    font-weight:600;
+    text-align:center;
+    color:var(--text);
+    letter-spacing:0.03em;
+    margin-bottom:12px;
+  }
+  .timer-controls{
+    display:flex; gap:8px;
+  }
+  .cockpit-btn{
+    flex:1;
+    font-family:var(--mono);
+    font-size:11.5px;
+    padding:8px 0;
+    border-radius:8px;
+    border:1px solid var(--w10);
+    background: linear-gradient(180deg, var(--w06), var(--w03));
+    color:var(--text);
+    cursor:pointer;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+    transition: border-color .18s ease, color .18s ease, transform .12s ease;
+  }
+  .cockpit-btn:hover{ border-color:rgba(232,178,109,0.45); color:var(--gold-bright); }
+  .cockpit-btn:active{ transform: translateY(1px); }
+  .countdown-input{
+    display:flex; gap:8px; margin-top:10px;
+  }
+  .countdown-input.hidden{ display:none; }
+  .countdown-input input{
+    width:100%;
+    font-family:var(--mono);
+    font-size:12.5px;
+    color:var(--text);
+    background:var(--w04);
+    border:1px solid var(--w10);
+    border-radius:8px;
+    padding:7px 10px;
+  }
+
+  .file-picker-label{
+    display:block;
+    text-align:center;
+    font-family:var(--mono);
+    font-size:11.5px;
+    color:var(--text-dim);
+    border:1px dashed var(--w18);
+    border-radius:8px;
+    padding:9px 0;
+    cursor:pointer;
+    margin-bottom:10px;
+    transition: border-color .2s ease, color .2s ease;
+  }
+  .file-picker-label:hover{ border-color:rgba(232,178,109,0.45); color:var(--gold-bright); }
+
+  .playlist{
+    list-style:none; margin:0 0 10px; padding:0;
+    max-height:110px; overflow-y:auto;
+    display:flex; flex-direction:column; gap:4px;
+  }
+  .playlist li{
+    font-family:var(--mono);
+    font-size:11.5px;
+    color:var(--text-dim);
+    padding:6px 8px;
+    border-radius:6px;
+    cursor:pointer;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .playlist li:hover{ background:var(--w05); }
+  .playlist li.playing{ color:var(--gold-bright); background:rgba(232,178,109,0.1); }
+
+  .player-now{
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--text-faint);
+    text-align:center;
+    margin-bottom:10px;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .player-controls{
+    display:flex; align-items:center; justify-content:center; gap:18px;
+    margin-bottom:10px;
+  }
+  .player-controls button{
+    background:none; border:none;
+    color:var(--text);
+    font-size:18px;
+    cursor:pointer;
+  }
+  .player-controls button:hover{ color:var(--gold-bright); }
+  #playPause{ font-size:22px; }
+
+  input[type="range"]{
+    -webkit-appearance:none;
+    width:100%;
+    height:3px;
+    border-radius:2px;
+    background:var(--w15);
+    margin-bottom:8px;
+    outline:none;
+  }
+  input[type="range"]::-webkit-slider-thumb{
+    -webkit-appearance:none;
+    width:11px; height:11px;
+    border-radius:50%;
+    background:var(--gold-bright);
+    cursor:pointer;
+    box-shadow: 0 0 6px rgba(255,214,150,0.6);
+  }
+  input[type="range"]::-moz-range-thumb{
+    width:11px; height:11px; border-radius:50%;
+    background:var(--gold-bright); border:none;
+    cursor:pointer;
+  }
+  .volume-row{
+    display:flex; align-items:center; gap:8px;
+  }
+  .volume-row span{ font-size:12px; color:var(--text-faint); }
+
+  /* ---------- THEME TOGGLE ---------- */
+  .theme-toggle{
+    position:fixed;
+    top:20px; right:20px;
+    z-index:45;
+    width:44px; height:44px;
+    border-radius:50%;
+    border:1px solid var(--panel-border);
+    background: var(--modal-bg-strong);
+    color:var(--gold-bright);
+    font-size:18px;
+    cursor:pointer;
+    box-shadow: 0 10px 26px -12px rgba(0,0,0,0.6);
+    display:flex; align-items:center; justify-content:center;
+    transition: transform .2s ease, background .35s ease, border-color .35s ease;
+  }
+  .theme-toggle:hover{ transform: scale(1.08); }
+
+  /* ---------- Q&A PRACTICE ---------- */
+  .qa-toggle{
+    position:fixed;
+    left:20px; bottom:20px;
+    z-index:40;
+    width:54px; height:54px;
+    border-radius:50%;
+    border:1px solid rgba(95,199,236,0.4);
+    background: radial-gradient(circle at 35% 28%, rgba(150,220,255,0.3), rgba(10,10,14,0.92) 70%);
+    color:var(--science-bright);
+    font-size:20px;
+    cursor:pointer;
+    box-shadow: 0 12px 30px -10px rgba(0,0,0,0.75), 0 0 0 1px var(--w03), inset 0 1px 0 rgba(255,255,255,0.12);
+    display:flex; align-items:center; justify-content:center;
+    transition: transform .18s ease, box-shadow .18s ease;
+  }
+  .qa-toggle:hover{ transform: scale(1.07) translateY(-1px); box-shadow: 0 16px 34px -10px rgba(95,199,236,0.4), 0 0 0 1px var(--w03); }
+  .qa-toggle:active{ transform: scale(0.97); }
+
+  .qa-overlay{
+    position:fixed; inset:0; z-index:50;
+    background: rgba(3,3,5,0.78);
+    backdrop-filter: blur(6px);
+    display:flex; align-items:center; justify-content:center;
+    padding:20px;
+  }
+  .qa-overlay.hidden{ display:none; }
+
+  .qa-modal{
+    width:100%;
+    max-width:560px;
+    max-height:calc(100vh - 40px);
+    overflow-y:auto;
+    border-radius:18px;
+    border:1px solid var(--panel-border);
+    background:
+      radial-gradient(600px 200px at 15% -20%, rgba(255,170,100,0.10), transparent 60%),
+      var(--void-2);
+    box-shadow: 0 30px 80px -25px rgba(0,0,0,0.9);
+    padding:24px;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+  }
+
+  .qa-header{
+    display:flex; align-items:center; justify-content:space-between;
+    gap:12px;
+  }
+  .qa-tabs{
+    display:flex; gap:6px;
+    background:var(--w03);
+    border:1px solid var(--w08);
+    border-radius:999px;
+    padding:4px;
+  }
+  .qa-tab-btn{
+    font-family:var(--mono);
+    font-size:12.5px;
+    letter-spacing:0.03em;
+    padding:7px 16px;
+    border-radius:999px;
+    border:none;
+    background:transparent;
+    color:var(--text-dim);
+    cursor:pointer;
+    transition: color .25s ease, background .25s ease, box-shadow .25s ease;
+  }
+  .qa-tab-btn.active[data-subject="maths"]{
+    background: linear-gradient(180deg, rgba(232,178,109,0.22), rgba(232,178,109,0.08));
+    color:var(--gold-bright);
+    box-shadow: inset 0 0 0 1px rgba(232,178,109,0.4);
+  }
+  .qa-tab-btn.active[data-subject="science"]{
+    background: linear-gradient(180deg, rgba(95,199,236,0.22), rgba(95,199,236,0.08));
+    color:var(--science);
+    box-shadow: inset 0 0 0 1px rgba(95,199,236,0.45);
+  }
+  .qa-close{
+    background:none; border:none; color:var(--text-faint);
+    cursor:pointer; font-size:18px; line-height:1;
+    padding:4px 6px;
+    flex-shrink:0;
+  }
+  .qa-close:hover{ color:var(--gold-bright); }
+
+  .qa-scorebar{
+    position:relative;
+    width:100%;
+    height:26px;
+    border-radius:999px;
+    background:var(--w05);
+    border:1px solid var(--w09);
+    overflow:hidden;
+  }
+  .qa-scorebar-fill{
+    position:absolute; inset:0 auto 0 0;
+    width:0%;
+    background: linear-gradient(90deg, rgba(232,178,109,0.55), rgba(95,199,236,0.55));
+    transition: width .35s ease;
+  }
+  .qa-scorebar-label{
+    position:relative;
+    z-index:1;
+    display:flex; align-items:center; justify-content:center;
+    height:100%;
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:0.06em;
+    color:var(--text);
+  }
+
+  .qa-streak{
+    font-family:var(--mono);
+    font-size:10.5px;
+    letter-spacing:0.04em;
+    color:var(--text-faint);
+    text-align:center;
+    margin-top:-6px;
+  }
+
+  .qa-progress{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--text-faint);
+    text-align:center;
+  }
+
+  .qa-question{
+    font-family:var(--serif);
+    font-size:1.12rem;
+    line-height:1.55;
+    color:var(--text);
+    min-height:2.4em;
+  }
+
+  .qa-answer-row{
+    display:flex; gap:8px;
+  }
+  .qa-answer-input{
+    flex:1;
+    font-family:var(--mono);
+    font-size:14px;
+    color:var(--text);
+    background:var(--w04);
+    border:1px solid var(--w12);
+    border-radius:10px;
+    padding:11px 14px;
+    outline:none;
+    transition:border-color .2s ease, background .2s ease;
+  }
+  .qa-answer-input:focus{
+    border-color: rgba(232,178,109,0.55);
+    background:var(--w06);
+  }
+  .qa-answer-input:disabled{ opacity:0.6; }
+  .qa-submit{
+    font-family:var(--mono);
+    font-size:13px;
+    letter-spacing:0.03em;
+    padding:0 20px;
+    border-radius:10px;
+    border:1px solid rgba(95,199,236,0.45);
+    background: linear-gradient(180deg, rgba(95,199,236,0.26), rgba(95,199,236,0.09));
+    color:var(--science-bright);
+    cursor:pointer;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.12);
+    transition: border-color .18s ease, background .18s ease, transform .12s ease;
+  }
+  .qa-submit:hover{ border-color: rgba(95,199,236,0.75); }
+  .qa-submit:active{ transform: translateY(1px); }
+  .qa-submit:disabled{ opacity:0.5; cursor:default; }
+
+  .qa-feedback{
+    font-family:var(--mono);
+    font-size:12.5px;
+    min-height:1.4em;
+  }
+  .qa-feedback.good{ color:#8fe0a8; }
+  .qa-feedback.bad{ color:var(--ember-soft); }
+
+  .qa-correct-answer{
+    font-family:var(--mono);
+    font-size:13px;
+    color:var(--gold-bright);
+    background:rgba(232,178,109,0.1);
+    border:1px solid rgba(232,178,109,0.3);
+    border-radius:10px;
+    padding:10px 14px;
+  }
+  .qa-correct-answer.hidden{ display:none; }
+
+  .qa-nav{
+    display:flex; gap:8px;
+    margin-top:4px;
+  }
+  .qa-nav-btn{
+    flex:1;
+    font-family:var(--mono);
+    font-size:12.5px;
+    padding:10px 0;
+    border-radius:10px;
+    border:1px solid var(--w10);
+    background: linear-gradient(180deg, var(--w06), var(--w03));
+    color:var(--text);
+    cursor:pointer;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+    transition: border-color .18s ease, color .18s ease, transform .12s ease;
+  }
+  .qa-nav-btn:hover{ border-color:rgba(95,199,236,0.5); color:var(--science-bright); }
+  .qa-nav-btn:active{ transform: translateY(1px); }
+  .qa-nav-btn:disabled{ opacity:0.4; cursor:default; }
+
+  /* ---------- TOOLS ROW ---------- */
+  .tools-row{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    justify-content:center;
+  }
+  .tool-btn{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    font-family:var(--mono);
+    font-size:12.5px;
+    letter-spacing:0.02em;
+    padding:8px 16px;
+    border-radius:999px;
+    border:1px solid var(--w10);
+    background: linear-gradient(180deg, var(--w05), var(--w02));
+    color:var(--text-dim);
+    cursor:pointer;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+    transition: border-color .18s ease, color .18s ease, transform .12s ease;
+  }
+  .tool-btn:hover{ border-color: rgba(232,178,109,0.4); color:var(--gold-bright); transform: translateY(-1px); }
+  .tool-btn:active{ transform: translateY(1px); }
+  .tool-btn-icon{ font-size:14px; }
+
+  /* ---------- GENERIC TABLE OVERLAY (periodic / multiplication) ---------- */
+  .table-overlay{
+    position:fixed; inset:0; z-index:55;
+    background: rgba(3,3,5,0.82);
+    backdrop-filter: blur(6px);
+    display:flex; align-items:center; justify-content:center;
+    padding:20px;
+  }
+  .table-overlay.hidden{ display:none; }
+  .table-modal{
+    width:100%;
+    max-height:calc(100vh - 40px);
+    overflow-y:auto;
+    border-radius:18px;
+    border:1px solid var(--panel-border);
+    background:
+      radial-gradient(600px 200px at 15% -20%, rgba(255,170,100,0.08), transparent 60%),
+      var(--void-2);
+    box-shadow: 0 30px 80px -25px rgba(0,0,0,0.9);
+    padding:22px;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+  .periodic-modal{ max-width:1080px; }
+  .mult-modal{ max-width:900px; }
+  .table-modal-header{
+    display:flex; align-items:center; justify-content:space-between;
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:1.15rem;
+    color:var(--gold-bright);
+  }
+  .table-modal-close{
+    background:none; border:none; color:var(--text-faint);
+    cursor:pointer; font-size:18px; line-height:1;
+    padding:4px 6px;
+    flex-shrink:0;
+    transition: color .2s ease;
+  }
+  .table-modal-close:hover{ color:var(--gold-bright); }
+
+  /* periodic table */
+  .periodic-info{
+    min-height:74px;
+    border-radius:12px;
+    border:1px solid var(--w09);
+    background:var(--w02);
+    padding:14px 18px;
+    display:flex; align-items:center; gap:16px;
+  }
+  .periodic-info-placeholder{
+    font-family:var(--mono);
+    font-size:13px;
+    color:var(--text-faint);
+    margin:0;
+  }
+  .periodic-info-symbol{
+    font-family:var(--mono);
+    font-weight:700;
+    font-size:2rem;
+    line-height:1;
+    color:var(--gold-bright);
+    min-width:60px;
+  }
+  .periodic-info-text .pi-name{
+    font-family:var(--serif);
+    font-size:1.1rem;
+    color:var(--text);
+    margin:0 0 4px;
+  }
+  .periodic-info-text .pi-meta{
+    font-family:var(--mono);
+    font-size:11.5px;
+    letter-spacing:0.04em;
+    color:var(--text-faint);
+    margin:0;
+    text-transform:capitalize;
+  }
+  .periodic-legend{
+    display:flex; flex-wrap:wrap; gap:8px 14px;
+    font-family:var(--mono);
+    font-size:10.5px;
+    color:var(--text-faint);
+  }
+  .periodic-legend span{ display:inline-flex; align-items:center; gap:5px; }
+  .periodic-legend i{ width:9px; height:9px; border-radius:3px; display:inline-block; }
+  .periodic-scroll{ overflow-x:auto; padding-bottom:6px; }
+  .periodic-grid{
+    display:grid;
+    grid-template-columns: repeat(8, 56px);
+    grid-auto-rows:52px;
+    gap:4px;
+    width:max-content;
+  }
+  .el-cell{
+    border-radius:6px;
+    border:1px solid var(--w09);
+    background:var(--w03);
+    color:var(--text);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    font-family:var(--mono);
+    line-height:1.1;
+    transition: transform .12s ease, box-shadow .15s ease, border-color .15s ease;
+  }
+  .el-cell:hover{ transform: translateY(-2px) scale(1.06); z-index:2; box-shadow: 0 8px 16px -6px rgba(0,0,0,0.6); }
+  .el-cell.selected{ border-color: var(--gold-bright); box-shadow: 0 0 0 1.5px var(--gold-bright); }
+  .el-num{ font-size:7.5px; color:var(--text-faint); align-self:flex-start; margin-left:4px; }
+  .el-sym{ font-size:14px; font-weight:700; }
+
+  .el-alkali{ background:rgba(255,140,70,0.16); }
+  .el-alkaline{ background:rgba(232,178,109,0.16); }
+  .el-transition{ background:rgba(95,199,236,0.14); }
+  .el-posttrans{ background:rgba(150,200,255,0.10); }
+  .el-metalloid{ background:rgba(150,110,230,0.16); }
+  .el-nonmetal{ background:rgba(120,220,160,0.14); }
+  .el-halogen{ background:rgba(255,214,120,0.16); }
+  .el-noble{ background:rgba(255,120,150,0.14); }
+  .el-lanthanide{ background:rgba(200,170,255,0.14); }
+  .el-actinide{ background:rgba(255,170,200,0.14); }
+
+  /* broad metal / nonmetal / metalloid marking */
+  .el-metal{ background:rgba(233,69,96,0.20); border-color:rgba(233,69,96,0.55); }
+  .el-metalloid-broad{ background:rgba(155,89,232,0.22); border-color:rgba(155,89,232,0.6); }
+  .el-nonmetal-broad{ background:rgba(16,185,129,0.20); border-color:rgba(16,185,129,0.55); }
+
+  /* multiplication table */
+  .mult-scroll{ overflow:auto; max-height:70vh; border-radius:10px; border:1px solid var(--w09); }
+  table.mult-table{ border-collapse:collapse; font-family:var(--mono); font-size:12px; }
+  .mult-table td, .mult-table th{
+    width:38px; height:32px;
+    text-align:center;
+    border:1px solid var(--w06);
+    color:var(--text-dim);
+    white-space:nowrap;
+  }
+  .mult-table th{
+    position:sticky;
+    background:var(--void-2);
+    color:var(--gold-bright);
+    font-weight:600;
+    z-index:2;
+  }
+  .mult-table thead th{ top:0; }
+  .mult-table th.row-head{ left:0; z-index:3; }
+  .mult-table th.corner{ left:0; top:0; z-index:4; }
+  .mult-table td.diag{ background: rgba(95,199,236,0.12); color:var(--science-bright); font-weight:600; }
+
+  /* ---------- TEXTBOOK LIBRARY MODALS ---------- */
+  .textbook-modal{ max-width:640px; }
+  .textbook-hint{
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--text-faint);
+    margin:-4px 0 2px;
+    line-height:1.5;
+  }
+  .textbook-group{
+    display:flex; flex-direction:column; gap:10px;
+  }
+  .textbook-group h4{
+    margin:0;
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:0.98rem;
+    color:var(--gold-bright);
+    border-bottom:1px solid var(--w08);
+    padding-bottom:6px;
+  }
+  .textbook-slot{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    border:1px solid var(--w09);
+    background:var(--w02);
+    border-radius:10px;
+    padding:9px 12px;
+  }
+  .textbook-slot-label{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--text-dim);
+    width:64px;
+    flex-shrink:0;
+  }
+  .textbook-slot-name{
+    flex:1;
+    min-width:0;
+    font-family:var(--mono);
+    font-size:11.5px;
+    color:var(--text-faint);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .textbook-slot-name.has-file{ color:var(--text); }
+  .textbook-slot-actions{
+    display:flex;
+    gap:6px;
+    flex-shrink:0;
+  }
+  .textbook-slot-btn{
+    font-family:var(--mono);
+    font-size:11px;
+    padding:6px 10px;
+    border-radius:7px;
+    border:1px solid var(--w10);
+    background: linear-gradient(180deg, var(--w06), var(--w03));
+    color:var(--text-dim);
+    cursor:pointer;
+    white-space:nowrap;
+    transition: border-color .18s ease, color .18s ease, transform .12s ease;
+  }
+  .textbook-slot-btn:hover{ border-color:rgba(232,178,109,0.45); color:var(--gold-bright); }
+  .textbook-slot-btn:active{ transform: translateY(1px); }
+  .textbook-slot-btn.remove:hover{ border-color:rgba(233,69,96,0.5); color:#FF8A9A; }
+  .textbook-slot-btn:disabled{ opacity:0.35; cursor:default; }
+  .textbook-slot-btn:disabled:hover{ border-color:var(--w10); color:var(--text-dim); }
+
+  /* ---------- ASK A DOUBT MODAL (Google search + Gemini AI) ---------- */
+  .doubt-modal{ max-width:560px; }
+  .doubt-section{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .doubt-section + .doubt-section{
+    border-top:1px solid var(--w08);
+    padding-top:16px;
+  }
+  .doubt-section h4{
+    margin:0;
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:0.98rem;
+    color:var(--gold-bright);
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .doubt-row{
+    display:flex;
+    gap:8px;
+  }
+  .doubt-input{
+    flex:1;
+    min-width:0;
+    font-family:var(--mono);
+    font-size:12.5px;
+    color:var(--text);
+    background:var(--w04);
+    border:1px solid var(--w10);
+    border-radius:8px;
+    padding:9px 12px;
+  }
+  .doubt-input:focus{ outline:none; border-color:rgba(232,178,109,0.5); }
+  textarea.doubt-input{ resize:vertical; min-height:56px; font-family:var(--serif); font-size:13.5px; }
+  .doubt-btn{
+    font-family:var(--mono);
+    font-size:12px;
+    padding:9px 16px;
+    border-radius:8px;
+    border:1px solid var(--w10);
+    background: linear-gradient(180deg, var(--w06), var(--w03));
+    color:var(--text);
+    cursor:pointer;
+    white-space:nowrap;
+    flex-shrink:0;
+    transition: border-color .18s ease, color .18s ease, transform .12s ease;
+  }
+  .doubt-btn:hover{ border-color:rgba(232,178,109,0.45); color:var(--gold-bright); }
+  .doubt-btn:active{ transform: translateY(1px); }
+  .doubt-btn:disabled{ opacity:0.45; cursor:default; }
+  .doubt-key-row{
+    display:flex;
+    gap:8px;
+    align-items:center;
+  }
+  .doubt-key-status{
+    font-family:var(--mono);
+    font-size:10.5px;
+    color:var(--text-faint);
+  }
+  .doubt-key-status.saved{ color:var(--science-bright); }
+  .doubt-hint{
+    font-family:var(--mono);
+    font-size:10.5px;
+    color:var(--text-faint);
+    line-height:1.5;
+    margin:0;
+  }
+  .doubt-hint a{ color:var(--gold); }
+  .doubt-answer{
+    border-radius:12px;
+    border:1px solid var(--w09);
+    background:var(--w02);
+    padding:14px 16px;
+    font-family:var(--serif);
+    font-size:14px;
+    line-height:1.6;
+    color:var(--text);
+    white-space:pre-wrap;
+  }
+  .doubt-answer.placeholder{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--text-faint);
+  }
+  .doubt-answer.error{ color:var(--ember-soft); }
+  .doubt-toggle-key{
+    background:none;
+    border:none;
+    color:var(--text-faint);
+    font-family:var(--mono);
+    font-size:10.5px;
+    text-decoration:underline;
+    cursor:pointer;
+    padding:0;
+  }
+  .doubt-toggle-key:hover{ color:var(--gold-bright); }
+
+  @media (max-width:520px){
+    .hole-wrap{ width:210px; height:210px; }
+    .reveal{ padding:22px 18px; }
+    .qa-modal{ padding:18px; }
+    .table-modal{ padding:16px; }
+    .periodic-grid{ grid-template-columns: repeat(8, 40px); grid-auto-rows:40px; }
+    .el-sym{ font-size:12px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="stars"></div>
+
+<button class="theme-toggle" id="themeToggle" aria-label="Toggle light and dark mode">🌙</button>
+
+<header class="hero">
+  <div class="hole-wrap">
+    <div class="bh-glow" aria-hidden="true"></div>
+    <div class="ring-h" aria-hidden="true"></div>
+    <div class="ring-v" aria-hidden="true"></div>
+    <div class="horizon" aria-hidden="true"></div>
+    <div class="designation"><span class="dot"></span>Gargantua · O/L syllabus</div>
+  </div>
+  <h1 class="title">Every formula, <span class="accent">one event horizon away.</span></h1>
+  <p class="subtitle">Every formula and equation from <strong>Grade 10 &amp; 11 Mathematics and Science</strong>, pulled into one place. Tap a term below to pull it out of the dark and see what it means.</p>
+</header>
+
+<div class="controls">
+  <div class="tabs" role="tablist">
+    <button class="tab-btn active" data-tab="maths" role="tab">Mathematics</button>
+    <button class="tab-btn" data-tab="science" role="tab">Science</button>
+  </div>
+  <div class="search-wrap">
+    <input type="text" id="searchInput" placeholder="Search a formula… e.g. acceleration, mole, sine rule">
+  </div>
+  <div class="tools-row">
+    <button class="tool-btn" id="periodicOpen" type="button">
+      <span class="tool-btn-icon">⚛</span> Periodic table
+    </button>
+    <button class="tool-btn" id="multOpen" type="button">
+      <span class="tool-btn-icon">✕</span> Times tables to 22
+    </button>
+    <button class="tool-btn" id="gr11Open" type="button">
+      <span class="tool-btn-icon">📘</span> Gr 11 textbook
+    </button>
+    <button class="tool-btn" id="gr10Open" type="button">
+      <span class="tool-btn-icon">📗</span> Gr 10 textbook
+    </button>
+    <button class="tool-btn" id="doubtOpen" type="button">
+      <span class="tool-btn-icon">🔎</span> Ask a doubt
+    </button>
+  </div>
+</div>
+
+<div class="reveal-outer">
+  <div class="reveal" id="revealPanel">
+    <p class="rv-placeholder">— select a formula to bring it into view —</p>
+  </div>
+</div>
+
+<main class="content" id="content"></main>
+
+<button class="cockpit-toggle" id="cockpitToggle" aria-label="Open cockpit: clock, timer &amp; music">🛰</button>
+
+<div class="cockpit-panel hidden" id="cockpitPanel">
+  <div class="cockpit-header">
+    <span>Cockpit</span>
+    <button id="cockpitClose" aria-label="Close cockpit">✕</button>
+  </div>
+
+  <div class="cockpit-section">
+    <div class="clock-time" id="clockTime">--:--:--</div>
+    <div class="clock-date" id="clockDate">—</div>
+  </div>
+
+  <div class="cockpit-section">
+    <div class="timer-tabs">
+      <button class="timer-tab active" data-mode="stopwatch">Stopwatch</button>
+      <button class="timer-tab" data-mode="countdown">Countdown</button>
+    </div>
+    <div class="timer-display" id="timerDisplay">00:00:00</div>
+    <div class="countdown-input hidden" id="countdownInput">
+      <input type="number" id="cdMinutes" min="1" max="180" value="25" placeholder="minutes">
+      <button class="cockpit-btn" id="cdSet">Set</button>
+    </div>
+    <div class="timer-controls">
+      <button class="cockpit-btn" id="timerStart">Start</button>
+      <button class="cockpit-btn" id="timerPause">Pause</button>
+      <button class="cockpit-btn" id="timerReset">Reset</button>
+    </div>
+  </div>
+
+  <div class="cockpit-section">
+    <label class="file-picker-label" for="audioFileInput">＋ Add your own tracks</label>
+    <input type="file" id="audioFileInput" accept="audio/*" multiple hidden>
+    <ul class="playlist" id="playlist"></ul>
+    <div class="player-now" id="nowPlaying">No track loaded</div>
+    <audio id="audioPlayer"></audio>
+    <input type="range" id="seekBar" min="0" max="100" value="0">
+    <div class="player-controls">
+      <button id="prevTrack" aria-label="Previous">⏮</button>
+      <button id="playPause" aria-label="Play">▶</button>
+      <button id="nextTrack" aria-label="Next">⏭</button>
+    </div>
+    <div class="volume-row">
+      <span>🔉</span>
+      <input type="range" id="volumeBar" min="0" max="100" value="80">
+    </div>
+  </div>
+</div>
+
+<button class="qa-toggle" id="qaToggle" aria-label="Open Q&amp;A practice">📝</button>
+
+<div class="qa-overlay hidden" id="qaOverlay">
+  <div class="qa-modal">
+    <div class="qa-header">
+      <div class="qa-tabs" role="tablist">
+        <button class="qa-tab-btn active" data-subject="maths" role="tab">Mathematics</button>
+        <button class="qa-tab-btn" data-subject="science" role="tab">Science</button>
+      </div>
+      <button class="qa-close" id="qaClose" aria-label="Close Q&amp;A">✕</button>
+    </div>
+
+    <div class="qa-scorebar">
+      <div class="qa-scorebar-fill" id="qaScoreFill"></div>
+      <span class="qa-scorebar-label" id="qaScoreLabel">Score: 0</span>
+    </div>
+    <div class="qa-streak" id="qaStreak">Closest approach: 0 in a row</div>
+
+    <div class="qa-progress" id="qaProgress">Question 1 of 100</div>
+
+    <div class="qa-question" id="qaQuestion">—</div>
+
+    <div class="qa-answer-row">
+      <input type="text" id="qaAnswerInput" class="qa-answer-input" placeholder="Type your answer…" autocomplete="off">
+      <button class="qa-submit" id="qaSubmit">Check</button>
+    </div>
+
+    <div class="qa-feedback" id="qaFeedback"></div>
+    <div class="qa-correct-answer hidden" id="qaCorrectAnswer"></div>
+
+    <div class="qa-nav">
+      <button class="qa-nav-btn" id="qaPrev">‹ Previous</button>
+      <button class="qa-nav-btn" id="qaNext">Next ›</button>
+    </div>
+  </div>
+</div>
+
+<div class="table-overlay hidden" id="periodicOverlay">
+  <div class="table-modal periodic-modal">
+    <div class="table-modal-header">
+      <span>Periodic Table of Elements</span>
+      <button class="table-modal-close" id="periodicClose" aria-label="Close periodic table">✕</button>
+    </div>
+    <div class="periodic-info" id="periodicInfo">
+      <p class="periodic-info-placeholder">— tap an element to bring it into view —</p>
+    </div>
+    <div class="periodic-legend" id="periodicLegend"></div>
+    <div class="periodic-scroll">
+      <div class="periodic-grid" id="periodicGrid"></div>
+    </div>
+  </div>
+</div>
+
+<div class="table-overlay hidden" id="multOverlay">
+  <div class="table-modal mult-modal">
+    <div class="table-modal-header">
+      <span>Multiplication Tables · 1–22</span>
+      <button class="table-modal-close" id="multClose" aria-label="Close multiplication table">✕</button>
+    </div>
+    <div class="mult-scroll">
+      <table class="mult-table" id="multTable"></table>
+    </div>
+  </div>
+</div>
+
+<div class="table-overlay hidden" id="gr11Overlay">
+  <div class="table-modal textbook-modal">
+    <div class="table-modal-header">
+      <span>Grade 11 Textbooks</span>
+      <button class="table-modal-close" id="gr11Close" aria-label="Close Grade 11 textbooks">✕</button>
+    </div>
+    <p class="textbook-hint">Add your own PDF for each part — they're stored in this browser, on this device, so they'll still be here next time you open this page.</p>
+    <div class="textbook-group">
+      <h4>Mathematics</h4>
+      <div class="textbook-slot" data-slot="gr11-maths-1" data-label="Part 1"></div>
+      <div class="textbook-slot" data-slot="gr11-maths-2" data-label="Part 2"></div>
+      <div class="textbook-slot" data-slot="gr11-maths-3" data-label="Part 3"></div>
+    </div>
+    <div class="textbook-group">
+      <h4>Science</h4>
+      <div class="textbook-slot" data-slot="gr11-science-1" data-label="Part 1"></div>
+      <div class="textbook-slot" data-slot="gr11-science-2" data-label="Part 2"></div>
+      <div class="textbook-slot" data-slot="gr11-science-3" data-label="Part 3"></div>
+    </div>
+  </div>
+</div>
+
+<div class="table-overlay hidden" id="gr10Overlay">
+  <div class="table-modal textbook-modal">
+    <div class="table-modal-header">
+      <span>Grade 10 Textbooks</span>
+      <button class="table-modal-close" id="gr10Close" aria-label="Close Grade 10 textbooks">✕</button>
+    </div>
+    <p class="textbook-hint">Add your own PDF for each part — they're stored in this browser, on this device, so they'll still be here next time you open this page.</p>
+    <div class="textbook-group">
+      <h4>Mathematics</h4>
+      <div class="textbook-slot" data-slot="gr10-maths-1" data-label="Part 1"></div>
+      <div class="textbook-slot" data-slot="gr10-maths-2" data-label="Part 2"></div>
+      <div class="textbook-slot" data-slot="gr10-maths-3" data-label="Part 3"></div>
+    </div>
+    <div class="textbook-group">
+      <h4>Science</h4>
+      <div class="textbook-slot" data-slot="gr10-science-1" data-label="Part 1"></div>
+      <div class="textbook-slot" data-slot="gr10-science-2" data-label="Part 2"></div>
+      <div class="textbook-slot" data-slot="gr10-science-3" data-label="Part 3"></div>
+    </div>
+  </div>
+</div>
+
+<div class="table-overlay hidden" id="doubtOverlay">
+  <div class="table-modal doubt-modal">
+    <div class="table-modal-header">
+      <span>Ask a doubt</span>
+      <button class="table-modal-close" id="doubtClose" aria-label="Close ask a doubt">✕</button>
+    </div>
+
+    <div class="doubt-section">
+      <h4>🔎 Google search</h4>
+      <div class="doubt-row">
+        <input type="text" class="doubt-input" id="googleQInput" placeholder="Search anything on Google…">
+        <button class="doubt-btn" id="googleQGo" type="button">Search</button>
+      </div>
+      <p class="doubt-hint">Opens Google in a new tab. No setup needed.</p>
+    </div>
+
+    <div class="doubt-section">
+      <h4>✨ Ask Gemini AI</h4>
+      <div id="geminiKeySetup">
+        <div class="doubt-key-row">
+          <input type="password" class="doubt-input" id="geminiKeyInput" placeholder="Paste your free Gemini API key…">
+          <button class="doubt-btn" id="geminiKeySave" type="button">Save</button>
+        </div>
+        <p class="doubt-hint" id="geminiKeyStatus">
+          No key saved yet. Get a free one at <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> — it's saved only in this browser, on this device, and is never sent anywhere except directly to Google.
+        </p>
+      </div>
+      <div class="doubt-row">
+        <textarea class="doubt-input" id="geminiQInput" placeholder="Type your question — e.g. why does the sine rule work?"></textarea>
+      </div>
+      <div class="doubt-row" style="justify-content:space-between; align-items:center;">
+        <button class="doubt-toggle-key" id="geminiChangeKey" type="button" style="display:none;">change / remove key</button>
+        <button class="doubt-btn" id="geminiAsk" type="button" style="margin-left:auto;">Ask Gemini</button>
+      </div>
+      <div class="doubt-answer placeholder" id="geminiAnswer">— your answer will appear here —</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="line"></div>
+  For O/L exam revision. Always double-check against your school textbook and teacher's notes.<br>
+  Made with gravity, light, and a little too much time near the event horizon.
+</footer>
+
+<script>
+/* ---------------- DATA ---------------- */
+
+const DATA = {
+  maths: [
+    {
+      cat: "Algebra",
+      items: [
+        {
+          name: "Quadratic Formula",
+          formula: `x = <span class="frac"><span class="num">−b ± √(b²−4ac)</span><span class="den">2a</span></span>`,
+          desc: "Solves any quadratic equation in the form ax² + bx + c = 0, when factorising doesn't work cleanly. Substitute a, b and c straight from the equation — the ± gives you both roots at once.",
+          deriv: "Start from ax² + bx + c = 0 and divide everything by a, then move c/a to the other side. <strong>Complete the square</strong> on the left by adding (b/2a)² to both sides — this turns x² + (b/a)x into a perfect square, (x + b/2a)². Taking the square root of both sides and rearranging for x lands you exactly on the formula. Every quadratic can be solved this way; the formula is just completing the square done once, in general, so you never have to redo it by hand."
+        },
+        {
+          name: "Perfect Square — (a+b)²",
+          formula: `(a + b)² = a² + 2ab + b²`,
+          desc: "One of the three key algebraic identities. Used constantly for expanding brackets quickly and for completing the square without long multiplication."
+        },
+        {
+          name: "Perfect Square — (a−b)²",
+          formula: `(a − b)² = a² − 2ab + b²`,
+          desc: "The subtraction version of the identity above. Notice only the middle term's sign changes — the a² and b² stay positive."
+        },
+        {
+          name: "Difference of Two Squares",
+          formula: `a² − b² = (a + b)(a − b)`,
+          desc: "Lets you factorise any expression that is 'something squared minus something squared' instantly, without a factor tree. Very common in O/L factorisation questions."
+        },
+        {
+          name: "nth Term of an A.P.",
+          formula: `Tₙ = a + (n − 1)d`,
+          desc: "Finds any term of an arithmetic progression (a sequence with a constant common difference d), where a is the first term and n is the position of the term you want."
+        },
+        {
+          name: "Sum of an A.P.",
+          formula: `Sₙ = <span class="frac"><span class="num">n</span><span class="den">2</span></span> [2a + (n − 1)d]`,
+          desc: "Adds up the first n terms of an arithmetic progression without adding them one by one. Needs the first term a, common difference d and number of terms n.",
+          deriv: "This is the same trick a young Gauss reportedly used to sum 1 to 100 in seconds. Write the sum forwards (a, a+d, a+2d, … , last term) and again backwards underneath it, then add the two rows term by term. Every pair adds up to the <strong>same total</strong> — first-plus-last — and there are n such pairs, so 2Sₙ = n × (first + last). Dividing by 2 and writing the last term as a + (n−1)d gives the formula."
+        }
+      ]
+    },
+    {
+      cat: "Commercial Mathematics",
+      items: [
+        {
+          name: "Simple Interest",
+          formula: `I = <span class="frac"><span class="num">P × R × T</span><span class="den">100</span></span>`,
+          desc: "P is the principal (amount invested/borrowed), R is the rate of interest per year (%), and T is time in years. The interest earned stays the same every year.",
+          deriv: "R% per year means R out of every 100 units of principal is earned as interest <strong>each year</strong>. So one year's interest is P × (R/100). Over T years, with simple interest never compounding, that same amount is earned T times: I = P × (R/100) × T, which is usually written as PRT/100."
+        },
+        {
+          name: "Compound Interest — Amount",
+          formula: `A = P (1 + R/100)ⁿ`,
+          desc: "Gives the total amount after n years when interest is added onto the principal each year (so you earn interest on interest). Subtract P from A to get the compound interest alone."
+        },
+        {
+          name: "Profit / Loss Percentage",
+          formula: `Profit % = <span class="frac"><span class="num">Profit</span><span class="den">Cost Price</span></span> × 100`,
+          desc: "Profit = Selling Price − Cost Price. If the value is negative, it's a loss instead — use the same formula with Loss in place of Profit."
+        }
+      ]
+    },
+    {
+      cat: "Mensuration (Area, Volume & Surface Area)",
+      items: [
+        {
+          name: "Area of a Triangle",
+          formula: `A = <span class="frac"><span class="num">1</span><span class="den">2</span></span> × base × height`,
+          desc: "Works for any triangle as long as you know the base and the perpendicular (vertical) height to that base — not a slanted side."
+        },
+        {
+          name: "Area of a Parallelogram",
+          formula: `A = base × height`,
+          desc: "The height must be the perpendicular distance between the two parallel sides used as the base, not the length of the slanted side."
+        },
+        {
+          name: "Area of a Trapezium",
+          formula: `A = <span class="frac"><span class="num">1</span><span class="den">2</span></span> (a + b) h`,
+          desc: "a and b are the lengths of the two parallel sides, and h is the perpendicular distance between them. Think of it as 'average of the parallel sides × height'."
+        },
+        {
+          name: "Circumference of a Circle",
+          formula: `C = 2πr = πd`,
+          desc: "The distance around a circle. r is the radius and d is the diameter (d = 2r). Use π ≈ 3.14 or 22/7 unless told otherwise."
+        },
+        {
+          name: "Area of a Circle",
+          formula: `A = πr²`,
+          desc: "r must be the radius, not the diameter — a very common O/L slip-up is plugging in the diameter by mistake.",
+          deriv: "Imagine slicing the circle into many thin pizza-slice sectors and laying them out alternately, points up and down. Laid flat, they form a shape close to a <strong>parallelogram</strong>: its length is half the circumference (πr, since the slices alternate) and its height is r. Area = base × height = πr × r = πr². The more slices you use, the closer the shape gets to a perfect rectangle and the formula becomes exact."
+        },
+        {
+          name: "Pythagorean Theorem",
+          formula: `a² + b² = c²`,
+          desc: "Only works for right-angled triangles. c is always the hypotenuse (the longest side, opposite the right angle); a and b are the other two sides.",
+          deriv: "Draw a square of side (a + b) and place four identical right-angled triangles (sides a, b, c) inside it, arranged pinwheel-style, leaving a tilted square of side c in the middle. The big square's area is (a+b)². That's also equal to the 4 triangles (4 × ½ab) plus the tilted inner square (c²). Setting these equal and expanding (a+b)² gives a² + 2ab + b² = 2ab + c² — the 2ab cancels from both sides, leaving <strong>a² + b² = c²</strong>."
+        },
+        {
+          name: "Volume of a Cuboid",
+          formula: `V = l × b × h`,
+          desc: "Length × breadth × height. The units end up cubed (cm³, m³) since three lengths are multiplied together."
+        },
+        {
+          name: "Volume of a Cylinder",
+          formula: `V = πr²h`,
+          desc: "Think of it as the area of the circular base (πr²) multiplied by how tall the cylinder stands (h)."
+        },
+        {
+          name: "Volume of a Cone",
+          formula: `V = <span class="frac"><span class="num">1</span><span class="den">3</span></span> πr²h`,
+          desc: "Exactly one-third the volume of a cylinder with the same base radius and height — worth remembering that relationship for quick checks."
+        },
+        {
+          name: "Volume of a Sphere",
+          formula: `V = (4/3) πr³`,
+          desc: "Only the radius is needed. Note the power is r³ (cubed), not r² — a frequent mix-up with the surface area formula below."
+        },
+        {
+          name: "Surface Area of a Sphere",
+          formula: `A = 4πr²`,
+          desc: "Gives the total curved surface area covering the sphere. Compare carefully with the volume formula so you don't confuse the powers of r."
+        }
+      ]
+    },
+    {
+      cat: "Trigonometry",
+      items: [
+        {
+          name: "Sine, Cosine, Tangent (SOH CAH TOA)",
+          formula: `sinθ = O/H&nbsp;&nbsp; cosθ = A/H&nbsp;&nbsp; tanθ = O/A`,
+          desc: "For a right-angled triangle: O = opposite side, A = adjacent side, H = hypotenuse — relative to the angle θ you're working with. The classic memory trick is 'SOH CAH TOA'."
+        },
+        {
+          name: "Area of a Triangle (using sine)",
+          formula: `A = <span class="frac"><span class="num">1</span><span class="den">2</span></span> ab sinC`,
+          desc: "Use this when you know two sides (a and b) and the angle C between them, instead of a base and a perpendicular height."
+        },
+        {
+          name: "Sine Rule",
+          formula: `<span class="frac"><span class="num">a</span><span class="den">sinA</span></span> = <span class="frac"><span class="num">b</span><span class="den">sinB</span></span> = <span class="frac"><span class="num">c</span><span class="den">sinC</span></span>`,
+          desc: "Relates each side of any triangle to the sine of the angle opposite it. Handy for finding a missing side or angle when the triangle isn't right-angled.",
+          deriv: "Drop a perpendicular height h from one vertex of the triangle down to the opposite side, splitting the triangle into two right-angled triangles that share that height. From one you get h = b sinA, from the other h = a sinB. Since both expressions equal the <strong>same h</strong>, a sinB = b sinA, which rearranges to a/sinA = b/sinB. Repeating with a different vertex brings in the third side and angle, giving the full three-way rule."
+        },
+        {
+          name: "Cosine Rule",
+          formula: `a² = b² + c² − 2bc cosA`,
+          desc: "A generalised Pythagorean theorem for any triangle. Use it when you know two sides and the angle between them (to find the third side), or all three sides (to find an angle)."
+        }
+      ]
+    },
+    {
+      cat: "Coordinate Geometry",
+      items: [
+        {
+          name: "Distance Between Two Points",
+          formula: `d = √[(x₂−x₁)² + (y₂−y₁)²]`,
+          desc: "Finds the straight-line distance between points (x₁, y₁) and (x₂, y₂) on a graph — really just the Pythagorean theorem applied to coordinates.",
+          deriv: "Draw the horizontal and vertical legs of a right-angled triangle between the two points: the horizontal leg has length (x₂−x₁), the vertical leg has length (y₂−y₁), and the line joining the two points is the <strong>hypotenuse</strong>. Pythagorean theorem then says hypotenuse² = (x₂−x₁)² + (y₂−y₁)². Taking the square root of both sides gives the distance formula directly."
+        },
+        {
+          name: "Midpoint of a Line Segment",
+          formula: `M = ( (x₁+x₂)/2 , (y₁+y₂)/2 )`,
+          desc: "Gives the exact centre point between two coordinates by averaging the x-values and averaging the y-values separately."
+        },
+        {
+          name: "Gradient (Slope) of a Line",
+          formula: `m = <span class="frac"><span class="num">y₂ − y₁</span><span class="den">x₂ − x₁</span></span>`,
+          desc: "Measures how steep a line is — rise over run. A positive gradient slopes upward left-to-right; a negative one slopes downward."
+        },
+        {
+          name: "Equation of a Straight Line",
+          formula: `y = mx + c`,
+          desc: "m is the gradient of the line and c is the y-intercept (where the line crosses the y-axis, at x = 0)."
+        }
+      ]
+    },
+    {
+      cat: "Statistics & Probability",
+      items: [
+        {
+          name: "Mean (Ungrouped Data)",
+          formula: `x̄ = <span class="frac"><span class="num">Σx</span><span class="den">n</span></span>`,
+          desc: "Add up every value in the data set (Σx) and divide by how many values there are (n) — the ordinary 'average'."
+        },
+        {
+          name: "Mean (Grouped / Frequency Data)",
+          formula: `x̄ = <span class="frac"><span class="num">Σfx</span><span class="den">Σf</span></span>`,
+          desc: "For data organised in a frequency table: multiply each value by its frequency, total those, and divide by the total frequency."
+        },
+        {
+          name: "Probability of an Event",
+          formula: `P(A) = <span class="frac"><span class="num">Favourable outcomes</span><span class="den">Total possible outcomes</span></span>`,
+          desc: "Always a number between 0 (impossible) and 1 (certain). Count how many outcomes satisfy the event, over how many outcomes are possible in total."
+        }
+      ]
+    },
+    {
+      cat: "Concepts, Explained",
+      items: [
+        {
+          name: "What Gradient Really Means",
+          basic: "Gradient measures steepness — how much a line rises (or falls) for every step you take sideways. A gradient of 2 means the line climbs 2 units up for every 1 unit across.",
+          advanced: "On a distance–time or velocity–time graph, gradient isn't just abstract steepness — it's a real physical quantity: the gradient of a distance–time graph is speed, and the gradient of a velocity–time graph is acceleration. This is the first bridge toward calculus, where gradient becomes the 'rate of change' at a single instant rather than over a whole line."
+        },
+        {
+          name: "What Probability Really Means",
+          basic: "Probability measures how likely something is to happen, on a scale from 0 (impossible) to 1 (certain). A probability of 0.5 means a fifty-fifty chance.",
+          advanced: "For independent events — where one outcome doesn't affect the other, like two separate coin tosses — you multiply their individual probabilities to find the chance of both happening. All possible outcomes of an event must add up to exactly 1, which is a quick way to check your working, or to find the probability of something 'not happening' by subtracting from 1."
+        },
+        {
+          name: "What the Mean Really Tells You",
+          basic: "The mean is the everyday 'average' — add everything up and share it equally across how many values there are. It gives one number that represents a whole data set.",
+          advanced: "The mean is sensitive to outliers — a single unusually large or small value can drag it away from what feels 'typical'. That's why the median (the middle value) is sometimes a fairer measure for skewed data, like household incomes or a test with a few extreme scores."
+        },
+        {
+          name: "What \"y = mx + c\" Really Describes",
+          basic: "This is the equation of a straight line. m tells you the gradient (steepness), and c tells you where the line crosses the y-axis.",
+          advanced: "Two lines are parallel exactly when they share the same gradient m, and perpendicular exactly when their gradients multiply to −1. Spotting this instantly from an equation, without drawing anything, is a favourite shortcut in O/L coordinate geometry questions."
+        },
+        {
+          name: "What an Arithmetic Progression Really Is",
+          basic: "A sequence of numbers where you add (or subtract) the same fixed amount to get from one term to the next — like 3, 7, 11, 15, each one 4 more than the last.",
+          advanced: "Because the difference is constant, an A.P. always graphs as evenly spaced points on a straight line. Its sum formula comes from pairing the first and last terms, then the second and second-last, and so on — a trick famously (if apocryphally) attributed to a young Gauss adding 1 to 100 in seconds."
+        },
+        {
+          name: "What Correlation Really Means",
+          basic: "Correlation describes whether two quantities tend to change together on a scatter graph. Positive correlation means both increase together; negative means one increases as the other decreases.",
+          advanced: "Correlation only shows that a pattern exists — it never proves that one thing causes the other. Ice-cream sales and drowning incidents both rise in summer, linked through a hidden third factor (heat), not because one causes the other."
+        }
+      ]
+    }
+  ],
+
+  science: [
+    {
+      cat: "Motion & Mechanics",
+      items: [
+        {
+          name: "Speed",
+          formula: `Speed = <span class="frac"><span class="num">Distance</span><span class="den">Time</span></span>`,
+          desc: "How much distance is covered per unit of time, regardless of direction. Measured in m/s or km/h."
+        },
+        {
+          name: "Acceleration",
+          formula: `a = <span class="frac"><span class="num">v − u</span><span class="den">t</span></span>`,
+          desc: "The rate at which velocity changes over time. u is initial velocity, v is final velocity, t is the time taken. A negative value means the object is slowing down (deceleration)."
+        },
+        {
+          name: "Equations of Motion — 1",
+          formula: `v = u + at`,
+          desc: "Finds final velocity (v) when you know initial velocity (u), acceleration (a), and time (t) — used for motion in a straight line with constant acceleration.",
+          deriv: "Straight from the definition of acceleration: a = (v − u) / t, the change in velocity divided by the time it took. Multiply both sides by t to get at = v − u, then add u to both sides. That's the whole derivation — this equation is just <strong>acceleration's definition</strong>, rearranged to make v the subject."
+        },
+        {
+          name: "Equations of Motion — 2",
+          formula: `s = ut + <span class="frac"><span class="num">1</span><span class="den">2</span></span>at²`,
+          desc: "Calculates the distance travelled (s) using initial velocity, time, and acceleration, without needing to know the final velocity.",
+          deriv: "On a velocity–time graph, distance travelled is the <strong>area under the line</strong>. With constant acceleration that area is a rectangle (height u, width t) plus a triangle on top (base t, height at, from v = u + at). Rectangle area is ut; triangle area is ½ × t × at = ½at². Add them together and you get s = ut + ½at²."
+        },
+        {
+          name: "Equations of Motion — 3",
+          formula: `v² = u² + 2as`,
+          desc: "Connects velocities and distance directly, useful when time isn't given. Solve for v or u by rearranging and taking a square root."
+        },
+        {
+          name: "Momentum",
+          formula: `p = mv`,
+          desc: "The 'quantity of motion' an object carries — mass multiplied by velocity. Total momentum before a collision equals total momentum after, if no external force acts (conservation of momentum)."
+        }
+      ]
+    },
+    {
+      cat: "Forces, Work & Energy",
+      items: [
+        {
+          name: "Newton's Second Law (Force)",
+          formula: `F = ma`,
+          desc: "Force equals mass times acceleration. A bigger force produces more acceleration for the same mass; a bigger mass needs more force for the same acceleration.",
+          deriv: "Newton originally defined force as the <strong>rate of change of momentum</strong>: F = Δp/Δt = (mv − mu)/t. If mass stays constant, this splits into F = m × (v − u)/t. But (v − u)/t is exactly the definition of acceleration, a — so the expression collapses to the familiar F = ma."
+        },
+        {
+          name: "Weight",
+          formula: `W = mg`,
+          desc: "Weight is the force of gravity pulling on a mass. m is mass in kg, g is the acceleration due to gravity (≈10 or 9.8 m/s² on Earth). Weight is a force, so it's measured in newtons, not kg."
+        },
+        {
+          name: "Density",
+          formula: `ρ = <span class="frac"><span class="num">m</span><span class="den">V</span></span>`,
+          desc: "Mass per unit volume — tells you how tightly packed the matter in an object is. Denser materials sink in less dense ones."
+        },
+        {
+          name: "Pressure",
+          formula: `P = <span class="frac"><span class="num">F</span><span class="den">A</span></span>`,
+          desc: "Force spread over an area. The same force pressed onto a smaller area creates much higher pressure — why knives are sharpened to a thin edge."
+        },
+        {
+          name: "Pressure in a Liquid",
+          formula: `P = hρg`,
+          desc: "The pressure at a depth h in a liquid depends on that depth, the liquid's density ρ, and gravity g. Pressure increases the deeper you go, regardless of the container's shape."
+        },
+        {
+          name: "Work Done",
+          formula: `W = F × d`,
+          desc: "Work is done when a force moves an object through a distance in the direction of the force. No movement means no work done, no matter how hard you push."
+        },
+        {
+          name: "Power",
+          formula: `P = <span class="frac"><span class="num">Work Done</span><span class="den">Time</span></span>`,
+          desc: "How quickly work is done, or energy is transferred. Measured in watts (1 watt = 1 joule per second)."
+        },
+        {
+          name: "Kinetic Energy",
+          formula: `KE = <span class="frac"><span class="num">1</span><span class="den">2</span></span>mv²`,
+          desc: "The energy an object has because it's moving. Doubling the speed quadruples the kinetic energy, since v is squared.",
+          deriv: "Energy transferred equals work done: KE = F × s. Using F = ma and the motion equation v² = u² + 2as (starting from rest, u = 0) gives s = v²/2a. Substitute that into W = F × s = ma × (v²/2a) — the <strong>a cancels</strong>, leaving KE = ½mv²."
+        },
+        {
+          name: "Gravitational Potential Energy",
+          formula: `PE = mgh`,
+          desc: "The energy an object stores because of its height h above the ground, due to gravity. Converts to kinetic energy as the object falls.",
+          deriv: "Lifting an object at constant speed means applying a force equal to its weight, W = mg, over a distance h. Work done = force × distance = mg × h. Since lifting it does work <strong>against gravity</strong> and that energy doesn't disappear, it's stored as gravitational potential energy — so PE = mgh."
+        },
+        {
+          name: "Efficiency",
+          formula: `Efficiency = <span class="frac"><span class="num">Useful energy output</span><span class="den">Total energy input</span></span> × 100%`,
+          desc: "No machine is perfectly efficient — some energy is always lost, usually as heat or sound. This tells you what fraction of the input actually does useful work."
+        },
+        {
+          name: "Moment of a Force",
+          formula: `Moment = F × d`,
+          desc: "The turning effect of a force about a pivot. F is the force applied and d is the perpendicular distance from the pivot to the line of action of the force."
+        },
+        {
+          name: "Principle of Moments",
+          formula: `Sum of clockwise moments = Sum of anticlockwise moments`,
+          desc: "For an object balanced and not turning, the total turning effect trying to rotate it one way must exactly cancel the total trying to rotate it the other way."
+        }
+      ]
+    },
+    {
+      cat: "Electricity",
+      items: [
+        {
+          name: "Ohm's Law",
+          formula: `V = IR`,
+          desc: "Voltage across a resistor equals current through it multiplied by its resistance. Rearranges to I = V/R or R = V/I depending on what you need to find.",
+          deriv: "Unlike most formulas here, this one isn't derived from something more basic — it's an <strong>experimental law</strong>. Ohm found that for many conductors at constant temperature, current is directly proportional to voltage: double the voltage, double the current. The constant of proportionality is what he named resistance, R, which is exactly what makes V = IR a definition of R as much as it is a law relating V and I."
+        },
+        {
+          name: "Electrical Power",
+          formula: `P = VI`,
+          desc: "Power delivered by an electrical circuit. Can also be written as P = I²R or P = V²/R using Ohm's Law, useful when voltage or current isn't given directly."
+        },
+        {
+          name: "Electrical Energy",
+          formula: `E = Pt`,
+          desc: "Energy used equals power multiplied by time. This is what electricity bills are based on, typically measured in kilowatt-hours."
+        },
+        {
+          name: "Charge",
+          formula: `Q = It`,
+          desc: "The amount of electric charge that flows equals the current multiplied by the time it flows for. Measured in coulombs."
+        },
+        {
+          name: "Resistors in Series",
+          formula: `R = R₁ + R₂ + R₃ + …`,
+          desc: "When resistors are connected end-to-end in one loop, their resistances simply add up — total resistance always increases."
+        },
+        {
+          name: "Resistors in Parallel",
+          formula: `<span class="frac"><span class="num">1</span><span class="den">R</span></span> = <span class="frac"><span class="num">1</span><span class="den">R₁</span></span> + <span class="frac"><span class="num">1</span><span class="den">R₂</span></span> + …`,
+          desc: "When resistors branch side by side, the total resistance is always less than the smallest individual resistor, because current has more paths to flow through."
+        }
+      ]
+    },
+    {
+      cat: "Waves, Light & Heat",
+      items: [
+        {
+          name: "Wave Equation",
+          formula: `v = fλ`,
+          desc: "Wave speed equals frequency multiplied by wavelength. Works for sound, light, and water waves alike — if two of the three are known, the third can be found.",
+          deriv: "Frequency f is how many wavelengths pass a point <strong>per second</strong>. Each wavelength that passes covers a distance λ. So the distance covered per second — which is exactly speed — is f wavelengths × λ metres each: v = f × λ. Same logic as 'speed = trips per second × length of each trip'."
+        },
+        {
+          name: "Refractive Index",
+          formula: `n = <span class="frac"><span class="num">sin i</span><span class="den">sin r</span></span>`,
+          desc: "Describes how much a ray of light bends when it passes from one medium into another. i is the angle of incidence, r is the angle of refraction."
+        },
+        {
+          name: "Specific Heat Capacity",
+          formula: `Q = mcΔT`,
+          desc: "Heat energy needed to change a substance's temperature. m is mass, c is the specific heat capacity of the material, and ΔT is the temperature change."
+        },
+        {
+          name: "Specific Latent Heat",
+          formula: `Q = mL`,
+          desc: "Heat energy needed to change a substance's state (melting or boiling) without changing its temperature. m is mass and L is the latent heat constant for that substance and change."
+        }
+      ]
+    },
+    {
+      cat: "Chemistry — Moles & Quantities",
+      items: [
+        {
+          name: "Number of Moles",
+          formula: `n = <span class="frac"><span class="num">m</span><span class="den">M</span></span>`,
+          desc: "n is the number of moles, m is the given mass of a substance (in grams), and M is its molar mass (from the periodic table, in g/mol)."
+        },
+        {
+          name: "Concentration of a Solution",
+          formula: `C = <span class="frac"><span class="num">n</span><span class="den">V</span></span>`,
+          desc: "Moles of solute dissolved per litre (dm³) of solution. A higher concentration means more solute packed into the same volume."
+        },
+        {
+          name: "Number of Particles",
+          formula: `N = n × Nₐ`,
+          desc: "Converts moles into an actual particle count, using Avogadro's number Nₐ = 6.02 × 10²³ particles per mole."
+        },
+        {
+          name: "Moles of a Gas at STP",
+          formula: `n = <span class="frac"><span class="num">V</span><span class="den">22.4</span></span>`,
+          desc: "At standard temperature and pressure, one mole of any gas occupies 22.4 dm³. Use this to convert between gas volume and number of moles."
+        },
+        {
+          name: "Percentage Composition",
+          formula: `% element = <span class="frac"><span class="num">Mass of element</span><span class="den">Molar mass of compound</span></span> × 100`,
+          desc: "Shows what fraction of a compound's total mass comes from one particular element — useful for checking a compound's formula against experimental data."
+        }
+      ]
+    },
+    {
+      cat: "Biology & Measurement",
+      items: [
+        {
+          name: "Magnification",
+          formula: `Magnification = <span class="frac"><span class="num">Image size</span><span class="den">Actual (object) size</span></span>`,
+          desc: "Used with microscope and diagram questions — tells you how many times larger the image appears compared to the real, actual size of the specimen."
+        },
+        {
+          name: "Body Mass Index (BMI)",
+          formula: `BMI = <span class="frac"><span class="num">Mass (kg)</span><span class="den">Height (m)²</span></span>`,
+          desc: "A simple screening figure relating body mass to height, used in the health and nutrition sections of the syllabus. Note the height is squared."
+        }
+      ]
+    },
+    {
+      cat: "Concepts, Explained",
+      items: [
+        {
+          name: "What Velocity Really Means",
+          basic: "Velocity tells you how fast something is moving and in which direction. Two cars both going 60 km/h — one north, one south — have the same speed but different velocities.",
+          advanced: "Because direction matters, velocity is a vector quantity (speed is just its size, or 'magnitude', with no direction attached). On a displacement–time graph, the slope's sign tells you which way the object is heading. An object can even have constant speed but changing velocity if it's turning — which is why circular motion always involves acceleration, even at a steady speed."
+        },
+        {
+          name: "What Acceleration Really Means",
+          basic: "Acceleration is how quickly velocity changes — not just speeding up, but any change in speed or direction. Slamming the brakes is acceleration too, just a negative one (deceleration).",
+          advanced: "Since velocity is a vector, acceleration is one too — an object moving at constant speed around a bend is still accelerating, because its direction keeps changing. Under gravity alone (ignoring air resistance), every falling object accelerates at the same rate, ≈9.8 m/s², no matter its mass — famously demonstrated by dropping a hammer and a feather on the Moon."
+        },
+        {
+          name: "What Force Really Means",
+          basic: "A force is simply a push or a pull. It can start, stop, speed up, slow down, or change the direction of a moving object — or squash and stretch it.",
+          advanced: "Forces always come in pairs (Newton's Third Law): push on a wall, and it pushes back on you equally. An object stays still or moves at constant velocity only when the forces on it are balanced (net force = zero); any unbalanced, or 'resultant', force causes acceleration, exactly as F = ma describes."
+        },
+        {
+          name: "What Energy Really Means",
+          basic: "Energy is the capacity to make things happen — to move something, heat something, or light something up. It comes in forms like kinetic, potential, heat, light, and chemical energy.",
+          advanced: "Energy is never created or destroyed, only transformed or transferred — the Law of Conservation of Energy. A falling ball converts gravitational potential energy into kinetic energy; a bulb converts electrical energy into light and (unavoidably) some heat, which is 'lost' in the sense that it's no longer useful, not that it has vanished."
+        },
+        {
+          name: "What a Mole Really Means",
+          basic: "Atoms and molecules are far too small and numerous to count one by one, so chemists group them into a convenient counting unit called a mole — just like a 'dozen' always means 12 of something.",
+          advanced: "One mole always contains exactly 6.02 × 10²³ particles (Avogadro's number), whatever the substance. This links the invisible world of atoms to the visible world of grams on a balance: weigh out a compound's molar mass in grams, and you're guaranteed exactly one mole of it, ready to use in a calculation."
+        },
+        {
+          name: "What Density Really Means",
+          basic: "Density compares how much mass is squeezed into a given space. A brick and a sponge can be the same size, but the brick is far denser because more mass is packed into that same volume.",
+          advanced: "An object floats in a fluid whenever its density is lower than the fluid's — why oil floats on water, and why a steel ship, far denser than water, still floats: its hollow shape spreads the same mass over a much larger volume, lowering its overall (average) density below water's."
+        },
+        {
+          name: "What Pressure Really Means",
+          basic: "Pressure describes how concentrated a force is over an area. The same force spread over a small area creates far more pressure than spread over a large one — a drawing pin hurts more than a flat palm pressing with equal force.",
+          advanced: "In fluids, pressure acts equally in all directions and increases with depth, since deeper points have more fluid weighing down from above (P = hρg). That's why your ears pop diving into a pool, and why dams are built thicker at the base than at the top."
+        },
+        {
+          name: "What Current and Voltage Really Mean",
+          basic: "Current is the flow of electric charge — like water flowing through a pipe. Voltage is the 'push' driving that flow — like the pressure forcing the water along.",
+          advanced: "Ohm's Law (V = IR) ties the two together through resistance: for a fixed resistance, more voltage pushes more current through. High resistance restricts flow the way a narrow pipe restricts water, even under high pressure — exactly why components overheat when too much current is forced through too little resistance."
+        },
+        {
+          name: "What Refraction Really Means",
+          basic: "Refraction is light bending as it passes from one material into another, like from air into water, because light travels at different speeds in different materials.",
+          advanced: "Light slows down entering a denser medium, which bends it toward an imaginary line perpendicular to the surface (the 'normal'). This is what makes a straw look bent in a glass of water, and is precisely quantified by the refractive index, n = sin i / sin r."
+        }
+      ]
+    }
+  ]
+};
+
+/* ---------------- RENDERING ---------------- */
+
+const contentEl = document.getElementById('content');
+const revealEl = document.getElementById('revealPanel');
+const searchInput = document.getElementById('searchInput');
+let currentTab = 'maths';
+
+/* ---------------- THEME TOGGLE ---------------- */
+const themeToggleBtn = document.getElementById('themeToggle');
+
+function currentTheme(){
+  return document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+}
+
+function applyThemeIcon(){
+  themeToggleBtn.textContent = currentTheme() === 'light' ? '☀️' : '🌙';
+  themeToggleBtn.setAttribute('aria-label', currentTheme() === 'light' ? 'Switch to dark mode' : 'Switch to light mode');
+}
+applyThemeIcon();
+
+themeToggleBtn.addEventListener('click', () => {
+  const next = currentTheme() === 'light' ? 'dark' : 'light';
+  if (next === 'dark'){
+    document.documentElement.removeAttribute('data-theme');
+  } else {
+    document.documentElement.setAttribute('data-theme', 'light');
+  }
+  try { localStorage.setItem('gargantuaTheme', next); } catch (e) {}
+  applyThemeIcon();
+});
+
+/* ---------- starfield parallax ---------- */
+const starsEl = document.querySelector('.stars');
+if (starsEl && window.matchMedia('(prefers-reduced-motion: no-preference)').matches){
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      starsEl.style.transform = `translateY(${window.scrollY * 0.08}px)`;
+      ticking = false;
+    });
+  }, { passive: true });
+}
+
+let selectedChip = null;
+
+const CAT_ICONS = {
+  "Algebra": `<path d="M4 4l16 16M20 4L4 20"/>`,
+  "Commercial Mathematics": `<circle cx="12" cy="12" r="8"/><path d="M12 7v10M9.5 9.5c0-1.4 1.2-2.2 2.5-2.2s2.5.8 2.5 2c0 1.6-2 1.8-2.5 2.2-1 .7-2.5 1-2.5 2.6 0 1.2 1.2 2 2.5 2s2.5-.8 2.5-2.2"/>`,
+  "Mensuration (Area, Volume & Surface Area)": `<rect x="4" y="9" width="10" height="10"/><circle cx="16.5" cy="7.5" r="4"/>`,
+  "Trigonometry": `<path d="M4 20h16M4 20L16 4v16"/><path d="M11 20a5 5 0 0 1 1.2-8"/>`,
+  "Coordinate Geometry": `<path d="M4 20V4M4 20h16"/><circle cx="14" cy="9" r="1.4" fill="currentColor" stroke="none"/><path d="M4 20L14 9"/>`,
+  "Statistics & Probability": `<path d="M5 20V12M12 20V6M19 20v-5"/><path d="M3 20h18"/>`,
+  "Motion & Mechanics": `<circle cx="12" cy="12" r="7"/><path d="M12 12l4-2"/><path d="M12 5V3M12 21v-2M5 12H3M21 12h-2"/>`,
+  "Forces, Work & Energy": `<path d="M13 3L5 14h6l-2 7 9-12h-6l1-6z"/>`,
+  "Electricity": `<path d="M13 2L5 14h6l-2 8 9-12h-6l1-8z"/>`,
+  "Waves, Light & Heat": `<path d="M2 12c2-4 4-4 5-0.5s3 3.5 5-0.5 3-4 5-0.5 3 3.5 5-0.5"/>`,
+  "Chemistry — Moles & Quantities": `<path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-9V3"/>`,
+  "Biology & Measurement": `<path d="M6 20C4 12 8 4 20 4c0 10-6 14-14 16z"/><path d="M6 20c2-6 5-9 9-11"/>`,
+  "Concepts, Explained": `<circle cx="12" cy="10" r="6"/><path d="M9.5 21h5M10 18h4"/><path d="M12 4V2"/>`
+};
+
+function renderTab(tab){
+  contentEl.innerHTML = '';
+  contentEl.dataset.subject = tab;
+  const groups = DATA[tab];
+
+  groups.forEach((group, gi) => {
+    const section = document.createElement('section');
+    section.className = 'category';
+
+    const h2 = document.createElement('h2');
+    const iconPath = CAT_ICONS[group.cat] || '';
+    const iconHtml = iconPath ? `<span class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${iconPath}</svg></span>` : '';
+    h2.innerHTML = `${iconHtml}<span class="cat-label">${group.cat}</span> <span class="cat-count">${group.items.length}</span>`;
+    section.appendChild(h2);
+
+    const grid = document.createElement('div');
+    grid.className = 'chip-grid';
+
+    group.items.forEach((item, ii) => {
+      const btn = document.createElement('button');
+      btn.className = 'chip';
+      btn.dataset.tab = tab;
+      btn.dataset.name = item.name.toLowerCase();
+      btn.textContent = item.name;
+      btn.addEventListener('click', () => selectFormula(item, tab, btn));
+      grid.appendChild(btn);
+    });
+
+    section.appendChild(grid);
+    contentEl.appendChild(section);
+  });
+
+  const emptyMsg = document.createElement('p');
+  emptyMsg.className = 'empty-msg';
+  emptyMsg.id = 'emptyMsg';
+  emptyMsg.style.display = 'none';
+  emptyMsg.textContent = 'Nothing matches that search in this subject.';
+  contentEl.appendChild(emptyMsg);
+}
+
+function selectFormula(item, tab, btnEl){
+  if (selectedChip) selectedChip.classList.remove('selected');
+  btnEl.classList.add('selected');
+  selectedChip = btnEl;
+
+  let html = `<p class="rv-label ${tab}">${tab === 'maths' ? 'Mathematics' : 'Science'}</p>`;
+
+  if (item.formula){
+    html += `<p class="rv-formula">${item.formula}</p>`;
+  }
+
+  html += `<p class="rv-name">${item.name}</p>`;
+
+  if (item.basic && item.advanced){
+    html += `<p class="rv-desc"><span class="lvl-tag basic">The basics</span>${item.basic}</p>`;
+    html += `<p class="rv-desc"><span class="lvl-tag adv">Going deeper</span>${item.advanced}</p>`;
+  } else {
+    html += `<p class="rv-desc">${item.desc}</p>`;
+  }
+
+  if (item.deriv){
+    html += `<button type="button" class="deriv-toggle" id="derivToggle">
+      <span class="deriv-toggle-icon">↓</span> Where this comes from
+    </button>
+    <div class="deriv-body hidden" id="derivBody">${item.deriv}</div>`;
+  }
+
+  revealEl.innerHTML = html;
+  revealEl.classList.remove('pulse');
+  void revealEl.offsetWidth;
+  revealEl.classList.add('pulse');
+
+  const derivToggle = document.getElementById('derivToggle');
+  if (derivToggle){
+    derivToggle.addEventListener('click', () => {
+      const body = document.getElementById('derivBody');
+      const open = !body.classList.contains('hidden');
+      body.classList.toggle('hidden');
+      derivToggle.classList.toggle('open', !open);
+    });
+  }
+
+  revealEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function switchTab(tab){
+  currentTab = tab;
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.tab === tab);
+  });
+  selectedChip = null;
+  revealEl.innerHTML = `<p class="rv-placeholder">— select a formula to bring it into view —</p>`;
+  searchInput.value = '';
+  renderTab(tab);
+}
+
+document.querySelectorAll('.tab-btn').forEach(b => {
+  b.addEventListener('click', () => switchTab(b.dataset.tab));
+});
+
+searchInput.addEventListener('input', () => {
+  const q = searchInput.value.trim().toLowerCase();
+  const chips = contentEl.querySelectorAll('.chip');
+  let anyVisibleInCategory = new Map();
+
+  chips.forEach(chip => {
+    const match = chip.dataset.name.includes(q);
+    chip.classList.toggle('hidden', !match);
+    const section = chip.closest('.category');
+    if (!anyVisibleInCategory.has(section)) anyVisibleInCategory.set(section, false);
+    if (match) anyVisibleInCategory.set(section, true);
+  });
+
+  let anyVisible = false;
+  anyVisibleInCategory.forEach((visible, section) => {
+    section.style.display = visible ? '' : 'none';
+    if (visible) anyVisible = true;
+  });
+
+  const emptyMsg = document.getElementById('emptyMsg');
+  if (emptyMsg) emptyMsg.style.display = (q && !anyVisible) ? 'block' : 'none';
+});
+
+renderTab(currentTab);
+
+/* ---------------- Q&A PRACTICE ---------------- */
+
+const QUIZ = {
+  maths: [
+    // Number & Indices
+    { q: "Evaluate: 2³ × 2⁴", a: ["128"] },
+    { q: "Evaluate: 3⁰", a: ["1"] },
+    { q: "Evaluate: 5⁻¹ as a fraction", a: ["1/5", "0.2"] },
+    { q: "Simplify: x⁵ ÷ x²", a: ["x³", "x^3", "x3"] },
+    { q: "Evaluate: (2²)³", a: ["64"] },
+    { q: "Find the HCF of 24 and 36", a: ["12"] },
+    { q: "Find the LCM of 4 and 6", a: ["12"] },
+    { q: "What is √144?", a: ["12"] },
+    { q: "What is the cube root of 27?", a: ["3"] },
+    { q: "Simplify: (−3) × (−4)", a: ["12"] },
+
+    // Algebra
+    { q: "Expand: (x+3)(x+2)", a: ["x²+5x+6", "x^2+5x+6", "x2+5x+6"] },
+    { q: "Factorise: x²−9", a: ["(x+3)(x-3)", "(x-3)(x+3)"] },
+    { q: "Factorise: x²+7x+12", a: ["(x+3)(x+4)", "(x+4)(x+3)"] },
+    { q: "Solve for x: 2x+5=13", a: ["4", "x=4"] },
+    { q: "Solve for x: 3x−7=11", a: ["6", "x=6"] },
+    { q: "Solve the simultaneous equations x+y=10 and x−y=2. Find x.", a: ["6", "x=6"] },
+    { q: "Solve the simultaneous equations x+y=10 and x−y=2. Find y.", a: ["4", "y=4"] },
+    { q: "Solve x²−5x+6=0. Give the smaller root.", a: ["2"] },
+    { q: "Solve x²−5x+6=0. Give the larger root.", a: ["3"] },
+    { q: "Simplify: 3(x+2) − 2(x−1)", a: ["x+8"] },
+    { q: "If a=2 and b=3, evaluate a²+b²", a: ["13"] },
+    { q: "Make x the subject of: y = x + 5", a: ["x=y-5", "y-5"] },
+    { q: "If a=5 and b=2, evaluate (a−b)²", a: ["9"] },
+    { q: "Solve the inequality x+3>7. Give the smallest whole number that satisfies it.", a: ["5"] },
+    { q: "Find the 5th term of the A.P.: 2, 5, 8, 11, …", a: ["14"] },
+    { q: "Find the sum of the first 4 terms of the A.P.: 3, 7, 11, 15", a: ["36"] },
+    { q: "Find the 10th term of the A.P. with first term 4 and common difference 3", a: ["31"] },
+
+    // Sets
+    { q: "If A = {1,2,3,4} and B = {3,4,5,6}, find A∩B", a: ["{3,4}"] },
+    { q: "If A = {1,2,3,4} and B = {3,4,5,6}, find A∪B", a: ["{1,2,3,4,5,6}"] },
+    { q: "If n(A)=8, n(B)=5, n(A∩B)=3, find n(A∪B)", a: ["10"] },
+    { q: "If ξ = {1,2,3,4,5,6,7,8} and A = {2,4,6,8}, find A′ (the complement of A)", a: ["{1,3,5,7}"] },
+    { q: "How many subsets does a set with 3 elements have?", a: ["8"] },
+    { q: "If A = {x, y, z}, how many elements does A have?", a: ["3"] },
+    { q: "What symbol represents the empty set?", a: ["∅", "{}"] },
+    { q: "If A∩B = ∅, what term describes sets A and B?", a: ["disjoint"] },
+
+    // Percentages / Ratios / Fractions
+    { q: "Express 3/4 as a percentage", a: ["75", "75%"] },
+    { q: "Find 20% of 150", a: ["30"] },
+    { q: "Increase 200 by 15%", a: ["230"] },
+    { q: "Decrease 80 by 25%", a: ["60"] },
+    { q: "Simplify the ratio 12:18 to its simplest form", a: ["2:3"] },
+    { q: "Divide 60 in the ratio 2:3. Find the smaller share.", a: ["24"] },
+    { q: "Express 0.6 as a fraction in its simplest form", a: ["3/5"] },
+    { q: "What is 1/8 as a percentage?", a: ["12.5", "12.5%"] },
+
+    // Financial Maths
+    { q: "Find the simple interest on Rs. 5000 at 8% per year for 2 years", a: ["800"] },
+    { q: "Find the compound interest on Rs. 1000 at 10% per year for 2 years", a: ["210"] },
+    { q: "A shirt costing Rs. 800 is sold for Rs. 1000. Find the profit percentage.", a: ["25", "25%"] },
+    { q: "An item bought for Rs. 500 is sold at a loss of 10%. Find the selling price.", a: ["450"] },
+    { q: "Find the amount after 3 years if Rs. 2000 is invested at 5% simple interest per year", a: ["2300"] },
+    { q: "A discount of 20% is given on a Rs. 1500 item. Find the discounted price.", a: ["1200"] },
+    { q: "If VAT is 15%, find the VAT payable on an item priced at Rs. 2000 (before VAT)", a: ["300"] },
+    { q: "Find the annual simple interest rate needed for Rs. 1000 to earn Rs. 150 interest in 3 years", a: ["5", "5%"] },
+    { q: "A sum doubles in 10 years at simple interest. Find the annual rate of interest.", a: ["10", "10%"] },
+    { q: "Find the compound interest for 1 year on Rs. 4000 at 5% per year", a: ["200"] },
+
+    // Mensuration
+    { q: "Find the area of a triangle with base 10cm and height 6cm", a: ["30"] },
+    { q: "Find the area of a rectangle 8cm by 5cm", a: ["40"] },
+    { q: "Find the perimeter of a square with side 7cm", a: ["28"] },
+    { q: "Find the area of a circle with radius 7cm (use π = 22/7)", a: ["154"] },
+    { q: "Find the circumference of a circle with radius 7cm (use π = 22/7)", a: ["44"] },
+    { q: "Find the volume of a cuboid 4cm × 3cm × 2cm", a: ["24"] },
+    { q: "Find the volume of a cube with side 5cm", a: ["125"] },
+    { q: "Find the volume of a cylinder with radius 7cm and height 10cm (use π = 22/7)", a: ["1540"] },
+    { q: "Find the area of a parallelogram with base 12cm and height 5cm", a: ["60"] },
+    { q: "Find the area of a trapezium with parallel sides 8cm and 12cm and height 5cm", a: ["50"] },
+    { q: "Find the surface area of a cube with side 4cm", a: ["96"] },
+    { q: "A right circular cone has radius 3cm and height 4cm. Find its slant height.", a: ["5"] },
+    { q: "Find the volume of a sphere with radius 3cm (use π ≈ 3)", a: ["108"] },
+    { q: "Find the area of a circle with diameter 14cm (use π = 22/7)", a: ["154"] },
+    { q: "The area of a square is 64cm². Find the length of one side.", a: ["8"] },
+
+    // Pythagoras & Geometry
+    { q: "A right triangle has legs 3cm and 4cm. Find the hypotenuse.", a: ["5"] },
+    { q: "A right triangle has hypotenuse 13cm and one leg 5cm. Find the other leg.", a: ["12"] },
+    { q: "Find the sum of the interior angles of a triangle.", a: ["180"] },
+    { q: "Find the sum of the interior angles of a quadrilateral.", a: ["360"] },
+    { q: "Each interior angle of a regular hexagon measures how many degrees?", a: ["120"] },
+    { q: "The angles of a triangle are in the ratio 1:2:3. Find the largest angle.", a: ["90"] },
+    { q: "Two angles on a straight line add up to how many degrees?", a: ["180"] },
+    { q: "Vertically opposite angles are always ___ to each other.", a: ["equal"] },
+    { q: "The angle in a semicircle is always how many degrees?", a: ["90"] },
+    { q: "Find x if x and 40° are complementary angles.", a: ["50"] },
+    { q: "Find x if x and 65° are supplementary angles.", a: ["115"] },
+    { q: "A triangle with all three sides equal is called what?", a: ["equilateral"] },
+
+    // Trigonometry
+    { q: "In a right triangle, opposite = 3 and hypotenuse = 5. Find sinθ.", a: ["3/5", "0.6"] },
+    { q: "Find sin30°", a: ["1/2", "0.5"] },
+    { q: "Find cos60°", a: ["1/2", "0.5"] },
+    { q: "Find tan45°", a: ["1"] },
+    { q: "Find cos0°", a: ["1"] },
+    { q: "Find sin90°", a: ["1"] },
+    { q: "Find tan60° (in surd form)", a: ["√3"] },
+    { q: "In a right triangle, adjacent = 4 and opposite = 3. Find tanθ.", a: ["3/4", "0.75"] },
+    { q: "If sinθ = cosθ, find θ (0°<θ<90°).", a: ["45"] },
+    { q: "Find the value of sin²30° + cos²30°", a: ["1"] },
+
+    // Coordinate Geometry
+    { q: "Find the distance between the points (0,0) and (3,4)", a: ["5"] },
+    { q: "Find the midpoint of (2,4) and (6,8)", a: ["(4,6)"] },
+    { q: "Find the gradient of the line joining (1,2) and (3,6)", a: ["2"] },
+    { q: "Find the gradient of the line y = 3x + 5", a: ["3"] },
+    { q: "Find the y-intercept of the line y = 2x − 7", a: ["-7"] },
+
+    // Statistics
+    { q: "Find the mean of: 4, 8, 6, 10, 2", a: ["6"] },
+    { q: "Find the median of: 3, 7, 9, 5, 1", a: ["5"] },
+    { q: "Find the mode of: 2, 3, 3, 5, 3, 7", a: ["3"] },
+    { q: "Find the range of: 12, 5, 9, 20, 3", a: ["17"] },
+    { q: "Find the mean of the first 5 natural numbers (1–5)", a: ["3"] },
+
+    // Probability
+    { q: "A fair coin is tossed once. Find the probability of getting a head.", a: ["1/2", "0.5"] },
+    { q: "A fair die is rolled once. Find the probability of getting a 4.", a: ["1/6"] },
+    { q: "A bag has 4 red and 6 blue balls. Find the probability of picking a red ball.", a: ["2/5"] },
+    { q: "A fair die is rolled once. Find the probability of getting an even number.", a: ["1/2"] },
+    { q: "Two coins are tossed. Find the probability of getting two heads.", a: ["1/4"] },
+    { q: "A fair die is rolled. Find the probability of getting a number greater than 4.", a: ["1/3"] }
+  ],
+  science: [
+    // Biology
+    { q: "What is the basic structural and functional unit of life?", a: ["cell"] },
+    { q: "Name the organelle known as the 'powerhouse of the cell'.", a: ["mitochondria", "mitochondrion"] },
+    { q: "Which organelle controls the activities of the cell and contains DNA?", a: ["nucleus"] },
+    { q: "What is the green pigment in plants that absorbs light for photosynthesis?", a: ["chlorophyll"] },
+    { q: "What gas do plants absorb during photosynthesis?", a: ["carbon dioxide", "co2"] },
+    { q: "What gas is released by plants during photosynthesis?", a: ["oxygen"] },
+    { q: "What is the process by which plants lose water vapour through their leaves?", a: ["transpiration"] },
+    { q: "Name the plant tissue that transports water and minerals.", a: ["xylem"] },
+    { q: "Name the plant tissue that transports food (sugars).", a: ["phloem"] },
+    { q: "What is the process by which organisms break down food to release energy?", a: ["respiration"] },
+    { q: "Name the gas required for aerobic respiration.", a: ["oxygen"] },
+    { q: "What is the site of protein synthesis in a cell?", a: ["ribosome", "ribosomes"] },
+    { q: "What is the outermost layer of an animal cell called?", a: ["cell membrane", "plasma membrane"] },
+    { q: "What structure gives a plant cell its rigid shape?", a: ["cell wall"] },
+    { q: "Name the pigment that gives blood its red colour.", a: ["haemoglobin", "hemoglobin"] },
+    { q: "Which blood cells help fight infection?", a: ["white blood cells", "leukocytes", "wbc"] },
+    { q: "Which blood cells carry oxygen around the body?", a: ["red blood cells", "erythrocytes", "rbc"] },
+    { q: "Name the organ that pumps blood around the body.", a: ["heart"] },
+    { q: "How many chambers does the human heart have?", a: ["4", "four"] },
+    { q: "Name the process of cell division that produces gametes.", a: ["meiosis"] },
+    { q: "Name the process of cell division that produces identical body cells.", a: ["mitosis"] },
+    { q: "What is the male reproductive cell in humans called?", a: ["sperm"] },
+    { q: "What is the female reproductive cell in humans called?", a: ["egg", "ovum"] },
+    { q: "Which organ filters waste from the blood to form urine?", a: ["kidney", "kidneys"] },
+    { q: "Name the largest organ of the human body.", a: ["skin"] },
+    { q: "What is the basic unit of heredity called?", a: ["gene"] },
+    { q: "What molecule carries genetic information in cells?", a: ["dna"] },
+    { q: "Name the process by which a species changes over time through natural selection.", a: ["evolution"] },
+    { q: "What term describes organisms that make their own food?", a: ["producers", "autotrophs"] },
+    { q: "What term describes organisms that eat other organisms for food?", a: ["consumers", "heterotrophs"] },
+    { q: "Name the organisms that break down dead matter, recycling nutrients.", a: ["decomposers"] },
+    { q: "What do we call a community of living organisms interacting with their non-living environment?", a: ["ecosystem"] },
+    { q: "What is the ultimate source of energy for almost all ecosystems?", a: ["sun", "the sun", "sunlight"] },
+    { q: "What term describes all the different populations living together in an area?", a: ["community"] },
+    { q: "What is the main greenhouse gas increasing due to human activity?", a: ["carbon dioxide", "co2"] },
+    { q: "Name the enzyme in saliva that breaks down starch.", a: ["amylase"] },
+    { q: "Where does digestion of protein mainly begin?", a: ["stomach"] },
+    { q: "Name the longest bone in the human body.", a: ["femur"] },
+    { q: "Which system in the body coordinates responses using electrical signals?", a: ["nervous system"] },
+    { q: "Name the gland that regulates blood sugar by producing insulin.", a: ["pancreas"] },
+
+    // Chemistry
+    { q: "What is the chemical symbol for sodium?", a: ["na"] },
+    { q: "What is the chemical symbol for potassium?", a: ["k"] },
+    { q: "What is the chemical symbol for iron?", a: ["fe"] },
+    { q: "What is the chemical symbol for gold?", a: ["au"] },
+    { q: "What is the chemical symbol for oxygen?", a: ["o"] },
+    { q: "What is the pH of a neutral solution?", a: ["7"] },
+    { q: "What colour does litmus paper turn in the presence of an acid?", a: ["red"] },
+    { q: "What colour does litmus paper turn in the presence of a base?", a: ["blue"] },
+    { q: "What do we call a substance that speeds up a chemical reaction without being consumed?", a: ["catalyst"] },
+    { q: "What is the chemical formula for water?", a: ["h2o"] },
+    { q: "What is the chemical formula for carbon dioxide?", a: ["co2"] },
+    { q: "What is the chemical formula for common salt (sodium chloride)?", a: ["nacl"] },
+    { q: "What is the process of a solid turning directly into a gas called?", a: ["sublimation"] },
+    { q: "What is the process of a liquid turning into a gas called?", a: ["evaporation", "vaporization", "vaporisation"] },
+    { q: "What is the process of a gas turning into a liquid called?", a: ["condensation"] },
+    { q: "What is the process of a solid turning into a liquid called?", a: ["melting"] },
+    { q: "What term describes the smallest particle of an element that retains its properties?", a: ["atom"] },
+    { q: "What is the name for a group of atoms bonded together?", a: ["molecule"] },
+    { q: "What subatomic particle carries a negative charge?", a: ["electron"] },
+    { q: "What subatomic particle carries a positive charge?", a: ["proton"] },
+    { q: "What subatomic particle has no charge?", a: ["neutron"] },
+    { q: "Where in the atom are protons and neutrons found?", a: ["nucleus"] },
+    { q: "The atomic number of an element equals the number of what?", a: ["protons"] },
+    { q: "Name the family of elements in Group 18 of the periodic table.", a: ["noble gases"] },
+    { q: "Name the family of elements in Group 1 of the periodic table.", a: ["alkali metals"] },
+    { q: "Name the family of elements in Group 17 of the periodic table.", a: ["halogens"] },
+    { q: "What term describes a reaction that releases heat to the surroundings?", a: ["exothermic"] },
+    { q: "What term describes a reaction that absorbs heat from the surroundings?", a: ["endothermic"] },
+    { q: "What is the product of an acid + base reaction, besides water?", a: ["salt"] },
+    { q: "What gas is produced when a metal reacts with a dilute acid?", a: ["hydrogen"] },
+    { q: "Name the process of separating a mixture using differences in boiling point.", a: ["distillation"] },
+    { q: "Name the process of separating an insoluble solid from a liquid using a filter.", a: ["filtration"] },
+    { q: "Give the numeric coefficient of Avogadro's number (×10²³).", a: ["6.02"] },
+    { q: "What is the valency of oxygen?", a: ["2"] },
+    { q: "What is the valency of hydrogen?", a: ["1"] },
+    { q: "Name the metal that is liquid at room temperature.", a: ["mercury"] },
+    { q: "Name the process of coating iron with zinc to prevent rusting.", a: ["galvanization", "galvanisation"] },
+    { q: "Besides moisture, what else is required for iron to rust?", a: ["oxygen", "air"] },
+
+    // Physics
+    { q: "What is the SI unit of force?", a: ["newton"] },
+    { q: "What is the SI unit of energy?", a: ["joule"] },
+    { q: "What is the SI unit of power?", a: ["watt"] },
+    { q: "What is the SI unit of electric current?", a: ["ampere"] },
+    { q: "What is the SI unit of electrical resistance?", a: ["ohm"] },
+    { q: "What is the SI unit of potential difference (voltage)?", a: ["volt"] },
+    { q: "What is the SI unit of mass?", a: ["kilogram", "kg"] },
+    { q: "What is the SI unit of length?", a: ["metre", "meter", "m"] },
+    { q: "What is the SI unit of time?", a: ["second", "s"] },
+    { q: "What name is given to a body's resistance to a change in motion?", a: ["inertia"] },
+    { q: "State the formula relating force, mass and acceleration: F = ?", a: ["ma", "m×a", "m*a"] },
+    { q: "State the formula for density: D = ?", a: ["mass/volume", "m/v"] },
+    { q: "What is the approximate acceleration due to gravity on Earth, in m/s²?", a: ["9.8", "10"] },
+    { q: "State the formula for work done: W = ?", a: ["force×distance", "fd", "f×d", "f*d"] },
+    { q: "State the formula for speed.", a: ["distance/time", "d/t"] },
+    { q: "Name the type of energy stored in a stretched rubber band.", a: ["elastic potential energy", "potential energy"] },
+    { q: "Name the type of energy possessed by a moving object.", a: ["kinetic energy"] },
+    { q: "What law states that energy cannot be created or destroyed, only transformed?", a: ["law of conservation of energy", "conservation of energy"] },
+    { q: "State Ohm's Law: V = ?", a: ["ir", "i×r", "i*r"] },
+    { q: "What type of circuit has only one path for current to flow?", a: ["series"] },
+    { q: "What type of circuit has multiple paths for current to flow?", a: ["parallel"] },
+    { q: "Name the device used to measure electric current.", a: ["ammeter"] },
+    { q: "Name the device used to measure potential difference (voltage).", a: ["voltmeter"] },
+    { q: "What is the term for light bouncing off a surface?", a: ["reflection"] },
+    { q: "What is the term for light bending when passing from one medium to another?", a: ["refraction"] },
+    { q: "What type of lens is thicker in the middle than at the edges?", a: ["convex"] },
+    { q: "What type of lens is thinner in the middle than at the edges?", a: ["concave"] },
+    { q: "What unit is used to measure the frequency of a wave?", a: ["hertz"] },
+    { q: "What term describes the distance between two successive crests of a wave?", a: ["wavelength"] },
+    { q: "What is the name for the bending of waves around obstacles?", a: ["diffraction"] },
+    { q: "In which state of matter are particles most tightly packed?", a: ["solid"] },
+    { q: "In which state of matter do particles move freely and fill their container?", a: ["gas"] },
+    { q: "What force pulls objects toward the centre of the Earth?", a: ["gravity", "gravitational force"] },
+    { q: "What is the name of the force that opposes motion between two surfaces in contact?", a: ["friction"] },
+    { q: "Like magnetic poles ___ each other.", a: ["repel"] },
+    { q: "Unlike magnetic poles ___ each other.", a: ["attract"] }
+  ]
+};
+
+const QUIZ_TOTAL = QUIZ.maths.length + QUIZ.science.length;
+
+function normalizeAns(s){
+  return String(s)
+    .toLowerCase()
+    .replace(/\s+/g, '')
+    .replace(/,/g, '')
+    .replace(/%$/, '')
+    .replace(/\.+$/, '')
+    .trim();
+}
+
+function isCorrectAnswer(userInput, accepted){
+  const norm = normalizeAns(userInput);
+  if (!norm) return false;
+  return accepted.some(a => normalizeAns(a) === norm);
+}
+
+function shuffledIndices(n){
+  const arr = Array.from({ length: n }, (_, i) => i);
+  for (let i = arr.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+let qaScore = 0;
+let qaStreak = 0;
+let qaBestStreak = 0;
+try {
+  const saved = localStorage.getItem('gargantuaQuizScore');
+  if (saved !== null) qaScore = parseInt(saved, 10) || 0;
+  const savedStreak = localStorage.getItem('gargantuaQuizBestStreak');
+  if (savedStreak !== null) qaBestStreak = parseInt(savedStreak, 10) || 0;
+} catch (e) { /* localStorage unavailable — score just won't persist */ }
+
+const qaOrder = {
+  maths: shuffledIndices(QUIZ.maths.length),
+  science: shuffledIndices(QUIZ.science.length)
+};
+const qaPos = { maths: 0, science: 0 };
+const qaAttempts = {};   // key: `${subject}-${idx}` -> attempt count
+const qaAnswered = {};   // key -> 'correct' | 'revealed'
+let qaSubject = 'maths';
+
+const qaToggle = document.getElementById('qaToggle');
+const qaOverlay = document.getElementById('qaOverlay');
+const qaCloseBtn = document.getElementById('qaClose');
+const qaTabBtns = document.querySelectorAll('.qa-tab-btn');
+const qaQuestionEl = document.getElementById('qaQuestion');
+const qaAnswerInput = document.getElementById('qaAnswerInput');
+const qaSubmitBtn = document.getElementById('qaSubmit');
+const qaFeedbackEl = document.getElementById('qaFeedback');
+const qaCorrectAnswerEl = document.getElementById('qaCorrectAnswer');
+const qaPrevBtn = document.getElementById('qaPrev');
+const qaNextBtn = document.getElementById('qaNext');
+const qaProgressEl = document.getElementById('qaProgress');
+const qaScoreFillEl = document.getElementById('qaScoreFill');
+const qaScoreLabelEl = document.getElementById('qaScoreLabel');
+const qaStreakEl = document.getElementById('qaStreak');
+
+function currentQuestionInfo(){
+  const pool = QUIZ[qaSubject];
+  const order = qaOrder[qaSubject];
+  const idx = order[qaPos[qaSubject]];
+  return { question: pool[idx], key: qaSubject + '-' + idx };
+}
+
+function renderQuestion(){
+  const { question, key } = currentQuestionInfo();
+  qaQuestionEl.textContent = question.q;
+  qaProgressEl.textContent = `Question ${qaPos[qaSubject] + 1} of ${QUIZ[qaSubject].length}`;
+  qaAnswerInput.value = '';
+  qaFeedbackEl.textContent = '';
+  qaFeedbackEl.className = 'qa-feedback';
+  qaCorrectAnswerEl.classList.add('hidden');
+  qaAnswerInput.disabled = false;
+  qaSubmitBtn.disabled = false;
+
+  const state = qaAnswered[key];
+  if (state === 'correct'){
+    qaFeedbackEl.textContent = '✓ Already answered correctly.';
+    qaFeedbackEl.className = 'qa-feedback good';
+    qaAnswerInput.disabled = true;
+    qaSubmitBtn.disabled = true;
+  } else if (state === 'revealed'){
+    qaCorrectAnswerEl.textContent = `Correct answer: ${question.a[0]}`;
+    qaCorrectAnswerEl.classList.remove('hidden');
+    qaAnswerInput.disabled = true;
+    qaSubmitBtn.disabled = true;
+  }
+
+  qaPrevBtn.disabled = qaPos[qaSubject] === 0;
+  qaAnswerInput.focus();
+}
+
+function renderScore(){
+  const pct = Math.max(0, Math.min(100, (qaScore / QUIZ_TOTAL) * 100));
+  qaScoreLabelEl.textContent = `Score: ${qaScore}`;
+  qaScoreFillEl.style.width = pct + '%';
+  if (qaStreakEl){
+    qaStreakEl.textContent = `Closest approach: ${qaBestStreak} in a row${qaStreak > 1 ? ` · streak ${qaStreak}` : ''}`;
+  }
+}
+
+function submitAnswer(){
+  const { question, key } = currentQuestionInfo();
+  if (qaAnswered[key]) return;
+  const val = qaAnswerInput.value.trim();
+  if (!val) return;
+
+  if (isCorrectAnswer(val, question.a)){
+    qaAnswered[key] = 'correct';
+    qaScore += 1;
+    qaStreak += 1;
+    if (qaStreak > qaBestStreak){
+      qaBestStreak = qaStreak;
+      try { localStorage.setItem('gargantuaQuizBestStreak', String(qaBestStreak)); } catch (e) {}
+    }
+    try { localStorage.setItem('gargantuaQuizScore', String(qaScore)); } catch (e) {}
+    qaFeedbackEl.textContent = '✓ Correct! +1 point';
+    qaFeedbackEl.className = 'qa-feedback good';
+    qaAnswerInput.disabled = true;
+    qaSubmitBtn.disabled = true;
+    renderScore();
+  } else {
+    qaAttempts[key] = (qaAttempts[key] || 0) + 1;
+    const left = 3 - qaAttempts[key];
+    if (left > 0){
+      qaFeedbackEl.textContent = `✗ Not quite — ${left} attempt${left === 1 ? '' : 's'} left.`;
+      qaFeedbackEl.className = 'qa-feedback bad';
+      qaAnswerInput.value = '';
+      qaAnswerInput.focus();
+    } else {
+      qaAnswered[key] = 'revealed';
+      qaStreak = 0;
+      qaFeedbackEl.textContent = '✗ Out of attempts.';
+      qaFeedbackEl.className = 'qa-feedback bad';
+      qaCorrectAnswerEl.textContent = `Correct answer: ${question.a[0]}`;
+      qaCorrectAnswerEl.classList.remove('hidden');
+      qaAnswerInput.disabled = true;
+      qaSubmitBtn.disabled = true;
+      renderScore();
+    }
+  }
+}
+
+qaSubmitBtn.addEventListener('click', submitAnswer);
+qaAnswerInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') submitAnswer();
+});
+
+qaPrevBtn.addEventListener('click', () => {
+  if (qaPos[qaSubject] > 0){
+    qaPos[qaSubject]--;
+    renderQuestion();
+  }
+});
+qaNextBtn.addEventListener('click', () => {
+  qaPos[qaSubject] = (qaPos[qaSubject] + 1) % QUIZ[qaSubject].length;
+  renderQuestion();
+});
+
+qaTabBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    qaSubject = btn.dataset.subject;
+    qaTabBtns.forEach(b => b.classList.toggle('active', b === btn));
+    renderQuestion();
+    renderScore();
+  });
+});
+
+qaToggle.addEventListener('click', () => {
+  qaSubject = currentTab;
+  qaStreak = 0;
+  qaTabBtns.forEach(b => b.classList.toggle('active', b.dataset.subject === qaSubject));
+  qaOverlay.classList.remove('hidden');
+  renderQuestion();
+  renderScore();
+});
+qaCloseBtn.addEventListener('click', () => qaOverlay.classList.add('hidden'));
+qaOverlay.addEventListener('click', (e) => {
+  if (e.target === qaOverlay) qaOverlay.classList.add('hidden');
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && !qaOverlay.classList.contains('hidden')){
+    qaOverlay.classList.add('hidden');
+  }
+});
+
+/* ---------------- COCKPIT: TOGGLE ---------------- */
+const cockpitToggle = document.getElementById('cockpitToggle');
+const cockpitPanel = document.getElementById('cockpitPanel');
+const cockpitClose = document.getElementById('cockpitClose');
+
+cockpitToggle.addEventListener('click', () => cockpitPanel.classList.toggle('hidden'));
+cockpitClose.addEventListener('click', () => cockpitPanel.classList.add('hidden'));
+
+/* ---------------- COCKPIT: CLOCK ---------------- */
+const clockTimeEl = document.getElementById('clockTime');
+const clockDateEl = document.getElementById('clockDate');
+
+function updateClock(){
+  const now = new Date();
+  clockTimeEl.textContent = now.toLocaleTimeString([], { hour12:false });
+  clockDateEl.textContent = now.toLocaleDateString([], { weekday:'short', year:'numeric', month:'short', day:'numeric' });
+}
+updateClock();
+setInterval(updateClock, 1000);
+
+/* ---------------- COCKPIT: TIMER ---------------- */
+const timerDisplay = document.getElementById('timerDisplay');
+const timerTabs = document.querySelectorAll('.timer-tab');
+const countdownInput = document.getElementById('countdownInput');
+const cdMinutesInput = document.getElementById('cdMinutes');
+const cdSetBtn = document.getElementById('cdSet');
+const timerStartBtn = document.getElementById('timerStart');
+const timerPauseBtn = document.getElementById('timerPause');
+const timerResetBtn = document.getElementById('timerReset');
+
+let timerMode = 'stopwatch';
+let timerInterval = null;
+let elapsedMs = 0;
+let countdownTotalMs = 25 * 60 * 1000;
+let countdownRemainingMs = countdownTotalMs;
+let lastTick = null;
+
+function formatMs(ms){
+  if (ms < 0) ms = 0;
+  const totalSec = Math.floor(ms / 1000);
+  const h = String(Math.floor(totalSec / 3600)).padStart(2,'0');
+  const m = String(Math.floor((totalSec % 3600) / 60)).padStart(2,'0');
+  const s = String(totalSec % 60).padStart(2,'0');
+  return `${h}:${m}:${s}`;
+}
+
+function renderTimer(){
+  timerDisplay.textContent = timerMode === 'stopwatch' ? formatMs(elapsedMs) : formatMs(countdownRemainingMs);
+}
+renderTimer();
+
+timerTabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    stopTimer();
+    timerMode = tab.dataset.mode;
+    timerTabs.forEach(t => t.classList.toggle('active', t === tab));
+    countdownInput.classList.toggle('hidden', timerMode !== 'countdown');
+    renderTimer();
+  });
+});
+
+cdSetBtn.addEventListener('click', () => {
+  stopTimer();
+  const mins = Math.max(1, Math.min(180, parseInt(cdMinutesInput.value, 10) || 25));
+  countdownTotalMs = mins * 60 * 1000;
+  countdownRemainingMs = countdownTotalMs;
+  renderTimer();
+});
+
+function tick(){
+  const now = performance.now();
+  const delta = now - lastTick;
+  lastTick = now;
+
+  if (timerMode === 'stopwatch'){
+    elapsedMs += delta;
+  } else {
+    countdownRemainingMs -= delta;
+    if (countdownRemainingMs <= 0){
+      countdownRemainingMs = 0;
+      renderTimer();
+      stopTimer();
+      timerDisplay.style.color = 'var(--science)';
+      return;
+    }
+  }
+  renderTimer();
+}
+
+function startTimer(){
+  if (timerInterval) return;
+  timerDisplay.style.color = 'var(--text)';
+  lastTick = performance.now();
+  timerInterval = setInterval(tick, 200);
+}
+function stopTimer(){
+  clearInterval(timerInterval);
+  timerInterval = null;
+}
+function resetTimer(){
+  stopTimer();
+  elapsedMs = 0;
+  countdownRemainingMs = countdownTotalMs;
+  timerDisplay.style.color = 'var(--text)';
+  renderTimer();
+}
+
+timerStartBtn.addEventListener('click', startTimer);
+timerPauseBtn.addEventListener('click', stopTimer);
+timerResetBtn.addEventListener('click', resetTimer);
+
+/* ---------------- COCKPIT: MUSIC PLAYER ---------------- */
+const audioFileInput = document.getElementById('audioFileInput');
+const playlistEl = document.getElementById('playlist');
+const nowPlayingEl = document.getElementById('nowPlaying');
+const audioPlayer = document.getElementById('audioPlayer');
+const playPauseBtn = document.getElementById('playPause');
+const prevTrackBtn = document.getElementById('prevTrack');
+const nextTrackBtn = document.getElementById('nextTrack');
+const seekBar = document.getElementById('seekBar');
+const volumeBar = document.getElementById('volumeBar');
+
+let tracks = [];
+let currentTrackIndex = -1;
+
+audioPlayer.volume = 0.8;
+
+audioFileInput.addEventListener('change', (e) => {
+  const files = Array.from(e.target.files || []);
+  files.forEach(file => {
+    tracks.push({ name: file.name.replace(/\.[^/.]+$/, ''), url: URL.createObjectURL(file) });
+  });
+  renderPlaylist();
+  if (currentTrackIndex === -1 && tracks.length){
+    loadTrack(0);
+  }
+  audioFileInput.value = '';
+});
+
+function renderPlaylist(){
+  playlistEl.innerHTML = '';
+  tracks.forEach((track, i) => {
+    const li = document.createElement('li');
+    li.textContent = track.name;
+    li.className = i === currentTrackIndex ? 'playing' : '';
+    li.addEventListener('click', () => loadTrack(i, true));
+    playlistEl.appendChild(li);
+  });
+}
+
+function loadTrack(index, autoplay){
+  if (index < 0 || index >= tracks.length) return;
+  currentTrackIndex = index;
+  audioPlayer.src = tracks[index].url;
+  nowPlayingEl.textContent = tracks[index].name;
+  renderPlaylist();
+  if (autoplay){
+    audioPlayer.play();
+    playPauseBtn.textContent = '⏸';
+  }
+}
+
+playPauseBtn.addEventListener('click', () => {
+  if (!tracks.length) return;
+  if (audioPlayer.paused){
+    audioPlayer.play();
+    playPauseBtn.textContent = '⏸';
+  } else {
+    audioPlayer.pause();
+    playPauseBtn.textContent = '▶';
+  }
+});
+
+prevTrackBtn.addEventListener('click', () => {
+  if (!tracks.length) return;
+  const i = (currentTrackIndex - 1 + tracks.length) % tracks.length;
+  loadTrack(i, true);
+});
+nextTrackBtn.addEventListener('click', () => {
+  if (!tracks.length) return;
+  const i = (currentTrackIndex + 1) % tracks.length;
+  loadTrack(i, true);
+});
+audioPlayer.addEventListener('ended', () => nextTrackBtn.click());
+
+audioPlayer.addEventListener('timeupdate', () => {
+  if (audioPlayer.duration){
+    seekBar.value = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+  }
+});
+seekBar.addEventListener('input', () => {
+  if (audioPlayer.duration){
+    audioPlayer.currentTime = (seekBar.value / 100) * audioPlayer.duration;
+  }
+});
+volumeBar.addEventListener('input', () => {
+  audioPlayer.volume = volumeBar.value / 100;
+});
+
+/* ---------------- PERIODIC TABLE (G.10/11 — first 20 elements) ---------------- */
+const ELEMENTS = [
+  { z:1,  sym:'H',  name:'Hydrogen',   mass:1,    group:1,  period:1, cat:'nonmetal',  type:'nonmetal' },
+  { z:2,  sym:'He', name:'Helium',     mass:4,    group:18, period:1, cat:'noble',     type:'nonmetal' },
+  { z:3,  sym:'Li', name:'Lithium',    mass:7,    group:1,  period:2, cat:'alkali',    type:'metal' },
+  { z:4,  sym:'Be', name:'Beryllium',  mass:9,    group:2,  period:2, cat:'alkaline',  type:'metal' },
+  { z:5,  sym:'B',  name:'Boron',      mass:11,   group:13, period:2, cat:'metalloid', type:'metalloid' },
+  { z:6,  sym:'C',  name:'Carbon',     mass:12,   group:14, period:2, cat:'nonmetal',  type:'nonmetal' },
+  { z:7,  sym:'N',  name:'Nitrogen',   mass:14,   group:15, period:2, cat:'nonmetal',  type:'nonmetal' },
+  { z:8,  sym:'O',  name:'Oxygen',     mass:16,   group:16, period:2, cat:'nonmetal',  type:'nonmetal' },
+  { z:9,  sym:'F',  name:'Fluorine',   mass:19,   group:17, period:2, cat:'halogen',   type:'nonmetal' },
+  { z:10, sym:'Ne', name:'Neon',       mass:20,   group:18, period:2, cat:'noble',     type:'nonmetal' },
+  { z:11, sym:'Na', name:'Sodium',     mass:23,   group:1,  period:3, cat:'alkali',    type:'metal' },
+  { z:12, sym:'Mg', name:'Magnesium',  mass:24,   group:2,  period:3, cat:'alkaline',  type:'metal' },
+  { z:13, sym:'Al', name:'Aluminium',  mass:27,   group:13, period:3, cat:'posttrans', type:'metal' },
+  { z:14, sym:'Si', name:'Silicon',    mass:28,   group:14, period:3, cat:'metalloid', type:'metalloid' },
+  { z:15, sym:'P',  name:'Phosphorus', mass:31,   group:15, period:3, cat:'nonmetal',  type:'nonmetal' },
+  { z:16, sym:'S',  name:'Sulphur',    mass:32,   group:16, period:3, cat:'nonmetal',  type:'nonmetal' },
+  { z:17, sym:'Cl', name:'Chlorine',   mass:35.5, group:17, period:3, cat:'halogen',   type:'nonmetal' },
+  { z:18, sym:'Ar', name:'Argon',      mass:40,   group:18, period:3, cat:'noble',     type:'nonmetal' },
+  { z:19, sym:'K',  name:'Potassium',  mass:39,   group:1,  period:4, cat:'alkali',    type:'metal' },
+  { z:20, sym:'Ca', name:'Calcium',    mass:40,   group:2,  period:4, cat:'alkaline',  type:'metal' },
+];
+
+const CATEGORY_LABELS = {
+  alkali:     'Alkali metal',
+  alkaline:   'Alkaline earth metal',
+  metalloid:  'Metalloid',
+  nonmetal:   'Nonmetal',
+  posttrans:  'Post-transition metal',
+  halogen:    'Halogen',
+  noble:      'Noble gas',
+};
+
+const TYPE_LABELS = { metal:'Metal', metalloid:'Metalloid', nonmetal:'Nonmetal' };
+const TYPE_ORDER = ['metal', 'metalloid', 'nonmetal'];
+const TYPE_CLASS = { metal:'el-metal', metalloid:'el-metalloid-broad', nonmetal:'el-nonmetal-broad' };
+
+/* Groups 3–12 (transition metals) have no elements this low in atomic
+   number, so columns are compacted to only the groups actually used —
+   this removes the big empty gap in the middle of the table. */
+const GROUP_COL = { 1:1, 2:2, 13:3, 14:4, 15:5, 16:6, 17:7, 18:8 };
+
+function buildPeriodicTable(){
+  const grid = document.getElementById('periodicGrid');
+  const legend = document.getElementById('periodicLegend');
+  const info = document.getElementById('periodicInfo');
+  grid.innerHTML = '';
+
+  ELEMENTS.forEach(el => {
+    const cell = document.createElement('div');
+    cell.className = `el-cell ${TYPE_CLASS[el.type]}`;
+    cell.style.gridColumn = GROUP_COL[el.group];
+    cell.style.gridRow = el.period;
+    cell.setAttribute('role', 'button');
+    cell.setAttribute('aria-label', `${el.name}, atomic number ${el.z}`);
+    cell.innerHTML = `<span class="el-num">${el.z}</span><span class="el-sym">${el.sym}</span>`;
+    cell.addEventListener('click', () => {
+      grid.querySelectorAll('.el-cell.selected').forEach(c => c.classList.remove('selected'));
+      cell.classList.add('selected');
+      info.innerHTML = `
+        <span class="periodic-info-symbol">${el.sym}</span>
+        <div class="periodic-info-text">
+          <p class="pi-name">${el.name} — atomic number ${el.z}</p>
+          <p class="pi-meta">${CATEGORY_LABELS[el.cat]} (${TYPE_LABELS[el.type]}) · relative atomic mass ≈ ${el.mass}</p>
+        </div>`;
+    });
+    grid.appendChild(cell);
+  });
+
+  legend.innerHTML = TYPE_ORDER
+    .map(type => `<span><i class="${TYPE_CLASS[type]}"></i>${TYPE_LABELS[type]}</span>`)
+    .join('');
+}
+buildPeriodicTable();
+
+/* ---------------- MULTIPLICATION TABLE (1–22) ---------------- */
+function buildMultTable(){
+  const table = document.getElementById('multTable');
+  const N = 22;
+  let html = '<thead><tr><th class="corner">×</th>';
+  for (let c = 1; c <= N; c++) html += `<th>${c}</th>`;
+  html += '</tr></thead><tbody>';
+  for (let r = 1; r <= N; r++){
+    html += `<tr><th class="row-head">${r}</th>`;
+    for (let c = 1; c <= N; c++){
+      html += `<td class="${r === c ? 'diag' : ''}">${r * c}</td>`;
+    }
+    html += '</tr>';
+  }
+  html += '</tbody>';
+  table.innerHTML = html;
+}
+buildMultTable();
+
+/* ---------------- TABLE OVERLAY OPEN/CLOSE WIRING ---------------- */
+const periodicOpen = document.getElementById('periodicOpen');
+const periodicOverlay = document.getElementById('periodicOverlay');
+const periodicClose = document.getElementById('periodicClose');
+
+periodicOpen.addEventListener('click', () => periodicOverlay.classList.remove('hidden'));
+periodicClose.addEventListener('click', () => periodicOverlay.classList.add('hidden'));
+periodicOverlay.addEventListener('click', (e) => {
+  if (e.target === periodicOverlay) periodicOverlay.classList.add('hidden');
+});
+
+const multOpen = document.getElementById('multOpen');
+const multOverlay = document.getElementById('multOverlay');
+const multClose = document.getElementById('multClose');
+
+multOpen.addEventListener('click', () => multOverlay.classList.remove('hidden'));
+multClose.addEventListener('click', () => multOverlay.classList.add('hidden'));
+multOverlay.addEventListener('click', (e) => {
+  if (e.target === multOverlay) multOverlay.classList.add('hidden');
+});
+
+const gr11Open = document.getElementById('gr11Open');
+const gr11Overlay = document.getElementById('gr11Overlay');
+const gr11Close = document.getElementById('gr11Close');
+
+gr11Open.addEventListener('click', () => gr11Overlay.classList.remove('hidden'));
+gr11Close.addEventListener('click', () => gr11Overlay.classList.add('hidden'));
+gr11Overlay.addEventListener('click', (e) => {
+  if (e.target === gr11Overlay) gr11Overlay.classList.add('hidden');
+});
+
+const gr10Open = document.getElementById('gr10Open');
+const gr10Overlay = document.getElementById('gr10Overlay');
+const gr10Close = document.getElementById('gr10Close');
+
+gr10Open.addEventListener('click', () => gr10Overlay.classList.remove('hidden'));
+gr10Close.addEventListener('click', () => gr10Overlay.classList.add('hidden'));
+gr10Overlay.addEventListener('click', (e) => {
+  if (e.target === gr10Overlay) gr10Overlay.classList.add('hidden');
+});
+
+const doubtOpen = document.getElementById('doubtOpen');
+const doubtOverlay = document.getElementById('doubtOverlay');
+const doubtClose = document.getElementById('doubtClose');
+
+doubtOpen.addEventListener('click', () => doubtOverlay.classList.remove('hidden'));
+doubtClose.addEventListener('click', () => doubtOverlay.classList.add('hidden'));
+doubtOverlay.addEventListener('click', (e) => {
+  if (e.target === doubtOverlay) doubtOverlay.classList.add('hidden');
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape'){
+    periodicOverlay.classList.add('hidden');
+    multOverlay.classList.add('hidden');
+    gr11Overlay.classList.add('hidden');
+    gr10Overlay.classList.add('hidden');
+    doubtOverlay.classList.add('hidden');
+  }
+});
+
+/* ---------------- TEXTBOOK LIBRARY (stored locally via IndexedDB) ---------------- */
+const TB_DB_NAME = 'gargantuaTextbooks';
+const TB_STORE = 'files';
+let tbDbPromise = null;
+
+function tbOpenDB(){
+  if (tbDbPromise) return tbDbPromise;
+  tbDbPromise = new Promise((resolve, reject) => {
+    const req = indexedDB.open(TB_DB_NAME, 1);
+    req.onupgradeneeded = () => {
+      req.result.createObjectStore(TB_STORE, { keyPath: 'slot' });
+    };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+  return tbDbPromise;
+}
+
+async function tbGet(slot){
+  const db = await tbOpenDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(TB_STORE, 'readonly');
+    const req = tx.objectStore(TB_STORE).get(slot);
+    req.onsuccess = () => resolve(req.result || null);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+async function tbPut(slot, name, blob){
+  const db = await tbOpenDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(TB_STORE, 'readwrite');
+    tx.objectStore(TB_STORE).put({ slot, name, blob });
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
+async function tbDelete(slot){
+  const db = await tbOpenDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(TB_STORE, 'readwrite');
+    tx.objectStore(TB_STORE).delete(slot);
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
+async function tbRenderSlot(slotEl){
+  const slot = slotEl.dataset.slot;
+  const label = slotEl.dataset.label;
+  let record = null;
+  try { record = await tbGet(slot); } catch (e) { /* ignore */ }
+
+  const hasFile = !!record;
+  slotEl.innerHTML = `
+    <span class="textbook-slot-label">${label}</span>
+    <span class="textbook-slot-name${hasFile ? ' has-file' : ''}">${hasFile ? record.name : 'No file added'}</span>
+    <div class="textbook-slot-actions">
+      <button type="button" class="textbook-slot-btn open" ${hasFile ? '' : 'disabled'}>Open</button>
+      <label class="textbook-slot-btn add" style="cursor:pointer;">
+        ${hasFile ? 'Replace' : 'Add'}
+        <input type="file" accept="application/pdf" hidden>
+      </label>
+      <button type="button" class="textbook-slot-btn remove" ${hasFile ? '' : 'disabled'}>Remove</button>
+    </div>
+  `;
+
+  const openBtn = slotEl.querySelector('.open');
+  const removeBtn = slotEl.querySelector('.remove');
+  const fileInput = slotEl.querySelector('input[type="file"]');
+
+  openBtn.addEventListener('click', async () => {
+    const rec = await tbGet(slot);
+    if (!rec) return;
+    const url = URL.createObjectURL(rec.blob);
+    window.open(url, '_blank');
+  });
+
+  removeBtn.addEventListener('click', async () => {
+    await tbDelete(slot);
+    tbRenderSlot(slotEl);
+  });
+
+  fileInput.addEventListener('change', async (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    await tbPut(slot, file.name, file);
+    tbRenderSlot(slotEl);
+  });
+}
+
+document.querySelectorAll('.textbook-slot').forEach(tbRenderSlot);
+
+/* ---------------- ASK A DOUBT: GOOGLE SEARCH ---------------- */
+const googleQInput = document.getElementById('googleQInput');
+const googleQGo = document.getElementById('googleQGo');
+
+function runGoogleSearch(){
+  const q = googleQInput.value.trim();
+  if (!q) return;
+  window.open('https://www.google.com/search?q=' + encodeURIComponent(q), '_blank');
+}
+googleQGo.addEventListener('click', runGoogleSearch);
+googleQInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') runGoogleSearch();
+});
+
+/* ---------------- ASK A DOUBT: GEMINI AI ---------------- */
+const GEMINI_KEY_STORAGE = 'gargantuaGeminiKey';
+const GEMINI_MODEL = 'gemini-2.5-flash';
+
+const geminiKeySetup = document.getElementById('geminiKeySetup');
+const geminiKeyInput = document.getElementById('geminiKeyInput');
+const geminiKeySave = document.getElementById('geminiKeySave');
+const geminiKeyStatus = document.getElementById('geminiKeyStatus');
+const geminiChangeKey = document.getElementById('geminiChangeKey');
+const geminiQInput = document.getElementById('geminiQInput');
+const geminiAsk = document.getElementById('geminiAsk');
+const geminiAnswer = document.getElementById('geminiAnswer');
+
+function getGeminiKey(){
+  try { return localStorage.getItem(GEMINI_KEY_STORAGE) || ''; } catch (e) { return ''; }
+}
+function setGeminiKey(key){
+  try {
+    if (key) localStorage.setItem(GEMINI_KEY_STORAGE, key);
+    else localStorage.removeItem(GEMINI_KEY_STORAGE);
+  } catch (e) { /* ignore */ }
+}
+
+function refreshGeminiKeyUI(){
+  const key = getGeminiKey();
+  if (key){
+    geminiKeySetup.style.display = 'none';
+    geminiChangeKey.style.display = 'inline';
+  } else {
+    geminiKeySetup.style.display = '';
+    geminiChangeKey.style.display = 'none';
+    geminiKeyInput.value = '';
+  }
+}
+refreshGeminiKeyUI();
+
+geminiKeySave.addEventListener('click', () => {
+  const key = geminiKeyInput.value.trim();
+  if (!key) return;
+  setGeminiKey(key);
+  refreshGeminiKeyUI();
+});
+geminiKeyInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') geminiKeySave.click();
+});
+
+geminiChangeKey.addEventListener('click', () => {
+  setGeminiKey('');
+  refreshGeminiKeyUI();
+});
+
+async function askGemini(){
+  const key = getGeminiKey();
+  const question = geminiQInput.value.trim();
+
+  if (!key){
+    geminiAnswer.className = 'doubt-answer error';
+    geminiAnswer.textContent = 'Add your Gemini API key above first — it only takes a minute at aistudio.google.com/apikey.';
+    return;
+  }
+  if (!question) return;
+
+  geminiAsk.disabled = true;
+  geminiAnswer.className = 'doubt-answer placeholder';
+  geminiAnswer.textContent = 'Thinking…';
+
+  try {
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-goog-api-key': key,
+        },
+        body: JSON.stringify({
+          contents: [
+            {
+              role: 'user',
+              parts: [{ text: `You are helping a Sri Lankan O/L (Grade 10-11) student with Mathematics or Science. Answer clearly and simply, showing steps where relevant. Question: ${question}` }]
+            }
+          ]
+        })
+      }
+    );
+
+    if (!res.ok){
+      const errBody = await res.text();
+      throw new Error(`Gemini API error (${res.status}): ${errBody.slice(0, 200)}`);
+    }
+
+    const data = await res.json();
+    const text = data && data.candidates && data.candidates[0] &&
+      data.candidates[0].content && data.candidates[0].content.parts &&
+      data.candidates[0].content.parts.map(p => p.text || '').join('');
+
+    geminiAnswer.className = 'doubt-answer';
+    geminiAnswer.textContent = text && text.trim() ? text.trim() : 'No answer came back — try rephrasing the question.';
+  } catch (err){
+    geminiAnswer.className = 'doubt-answer error';
+    geminiAnswer.textContent = 'Something went wrong: ' + err.message + '\n\nDouble-check your API key is correct and still active.';
+  } finally {
+    geminiAsk.disabled = false;
+  }
+}
+
+geminiAsk.addEventListener('click', askGemini);
+geminiQInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) askGemini();
+});
+</script>
+</body>
+</html>
